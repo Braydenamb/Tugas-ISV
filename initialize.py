@@ -65,9 +65,12 @@ def main(argv=None):
     parser.add_argument("--skip-install", action="store_true", help="Lewati pip; hanya untuk lingkungan yang sudah memiliki dependensi")
     parser.add_argument("--run", action="store_true", help="Jalankan kalibrasi setelah penyiapan berhasil")
     parser.add_argument("--compare", action="store_true", help="Setelah penyiapan, bandingkan baseline dan mild")
+    parser.add_argument("--experiment", choices=("panels",), help="Setelah penyiapan, uji metode dua panel dengan validasi silang")
     args = parser.parse_args(argv)
-    if args.check and (args.run or args.compare or args.skip_install):
+    if args.check and (args.run or args.compare or args.skip_install or args.experiment):
         parser.error("--check dipakai sendiri agar tidak mengubah atau menjalankan proyek")
+    if args.compare and args.experiment:
+        parser.error("--compare dan --experiment dijalankan terpisah")
     try:
         if sys.version_info < (3, 10):
             raise RuntimeError("Gunakan Python 3.10 atau lebih baru")
@@ -91,10 +94,12 @@ def main(argv=None):
             subprocess.run([str(python), "-m", "pip", "install", "--disable-pip-version-check", "--timeout", "30", "--retries", "1", "-r", str(ROOT / "requirements.txt")], cwd=ROOT, check=True)
         check_dependencies(python)
         print("Penyiapan selesai. Jalankan: python run.py memakai Python di .venv, atau python initialize.py --run.", flush=True)
-        if args.run or args.compare:
+        if args.run or args.compare or args.experiment:
             command = [str(python), str(ROOT / "run.py")]
             if args.compare:
                 command.append("--compare")
+            if args.experiment:
+                command.extend(["--experiment", args.experiment])
             subprocess.run(command, cwd=ROOT, check=True)
         return 0
     except (OSError, ValueError, KeyError, RuntimeError, subprocess.CalledProcessError) as exc:

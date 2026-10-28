@@ -14,6 +14,21 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from isv_calibration.calibration import calibrate, error_metrics, load_config
 from isv_calibration.preprocessing import remeasure
+from isv_calibration.alternatives import correlation_corners
+
+
+def synthetic_checkerboard():
+    canvas = np.full((840, 840), 150, np.uint8)
+    yy, xx = np.indices((640, 640))
+    canvas[100:740, 100:740] = np.where((xx // 80 + yy // 80) % 2, 235, 20)
+    source = np.float32([[0, 0], [839, 0], [839, 839], [0, 839]])
+    target = np.float32([[140, 65], [1120, 140], [1030, 885], [65, 760]])
+    H = cv.getPerspectiveTransform(source, target)
+    image = cv.warpPerspective(canvas, H, (1280, 960))
+    grid = np.mgrid[:7, :7].T.reshape(-1, 2).astype(np.float32)
+    truth = cv.perspectiveTransform((179.5 + grid * 80).reshape(-1, 1, 2), H)
+    initial = truth + np.random.default_rng(42).normal(0, 1, truth.shape).astype(np.float32)
+    return image, truth, initial
 
 
 class MeasurementTests(unittest.TestCase):
@@ -53,22 +68,22 @@ class MeasurementTests(unittest.TestCase):
 
     def test_both_profiles_return_original_perspective_coordinates(self):
         # Independent known geometry, not projected points from the fitted calibration.
-        canvas = np.full((840, 840), 150, np.uint8)
-        yy, xx = np.indices((640, 640))
-        canvas[100:740, 100:740] = np.where((xx // 80 + yy // 80) % 2, 235, 20)
-        source = np.float32([[0, 0], [839, 0], [839, 839], [0, 839]])
-        target = np.float32([[140, 65], [1120, 140], [1030, 885], [65, 760]])
-        H = cv.getPerspectiveTransform(source, target)
-        image = cv.warpPerspective(canvas, H, (1280, 960))
-        grid = np.mgrid[:7, :7].T.reshape(-1, 2).astype(np.float32)
-        truth = cv.perspectiveTransform((179.5 + grid * 80).reshape(-1, 1, 2), H)
-        initial = truth + np.random.default_rng(42).normal(0, 1, truth.shape).astype(np.float32)
+        image, truth, initial = synthetic_checkerboard()
         for profile in ("baseline", "mild"):
             with self.subTest(profile=profile):
                 points, _ = remeasure(image, initial.copy(), (7, 7), profile)
                 error = np.linalg.norm((points - truth).reshape(-1, 2), axis=1)
                 self.assertLess(float(error.mean()), 0.8)
                 self.assertLess(float(error.max()), 1.5)
+
+    def test_correlation_returns_observed_corner_not_noisy_initialization(self):
+        image, truth, initial = synthetic_checkerboard()
+        valid = np.mgrid[:7, :7].T.reshape(-1, 2)[:, 0] != 3
+        points, diagnostics = correlation_corners(image, initial.copy(), valid)
+        error = np.linalg.norm((points[valid] - truth[valid]).reshape(-1, 2), axis=1)
+        self.assertEqual(len(diagnostics), 42)
+        self.assertLess(float(error.mean()), 0.8)
+        self.assertLess(float(error.max()), 1.5)
 
 
 if __name__ == "__main__":

@@ -68,6 +68,36 @@ belum menunjukkan perbaikan, sehingga tidak dijadikan default. Ini kecocokan
 pada data kalibrasi, bukan validasi pada foto independen. CLAHE/blur tidak bisa
 meratakan papan secara fisik atau menghilangkan celah sambungan.
 
+## Metode alternatif: korelasi sudut dan dua panel
+
+Jalankan eksperimen yang menggunakan bentuk fisik papan lipat:
+
+```bash
+python initialize.py --skip-install --experiment panels
+```
+
+Untuk instalasi baru, hilangkan `--skip-install` agar dependensi dipasang dulu.
+Jika `.venv` aktif, perintah langsungnya `python run.py --experiment panels`.
+
+Eksperimen membandingkan empat kombinasi: deteksi hasil audit/korelasi pola empat
+kuadran, masing-masing dengan model satu bidang/dua panel. Model dua panel
+memakai satu K dan distorsi bersama, serta dua pose per foto. Semua 29 foto
+dipertahankan; garis titik pada celah tengah dikecualikan secara seragam dari
+semua kombinasi, sehingga perbandingan memakai 1.216 titik yang sama.
+
+Validasi silang lima bagian menahan foto dari estimasi intrinsik. Pada foto
+tertahan, pose dihitung dari titik jangkar, lalu error dinilai pada titik lain.
+Model dua panel memiliki parameter lebih banyak; penurunan error latih saja
+tidak cukup. Hasilnya merupakan pengembangan atas asumsi satu papan datar pada
+materi dan harus dijelaskan sebagai eksperimen, bukan prosedur identik.
+
+Eksperimen khusus dataset 7x7 yang orientasi sambungannya tercatat pada
+`config/board_panels.json`. Hash foto diverifikasi sebelum konfigurasi panel
+diterapkan. Dataset lain perlu pemeriksaan orientasi dan konfigurasi yang sesuai.
+
+Baca `reports/alternatives.md` setelah run, atau [ringkasan penelitian metode](reports/method_study.md).
+Baseline perkuliahan tetap menjadi default; eksperimen tidak menggantinya otomatis.
+
 ## Struktur folder
 
 ```text

@@ -17,6 +17,7 @@ dist/
 /reports/latest.md
 /reports/latest_run.json
 /reports/comparison.md
+/reports/alternatives.md
 
 # Local editor / operating-system files and credentials
 .idea/
