@@ -1,0 +1,33 @@
+# Local environments and Python caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# Generated runs, local experiments, and recovered historical files
+/outputs/
+/archive/
+/tmp/
+.cache/
+*.log
+/reports/latest.md
+/reports/latest_run.json
+/reports/comparison.md
+
+# Local editor / operating-system files and credentials
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.aws/
+.agents/
+.codex/

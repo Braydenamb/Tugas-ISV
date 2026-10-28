@@ -1,0 +1,9 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.jpg -text
+*.jpeg -text
+*.png -text
+*.pdf -text
+*.npz -text
