@@ -1,5 +1,8 @@
 # Metode alternatif untuk papan catur lipat
 
+Dokumen ini menyimpan tahap awal eksperimen dua panel. Riwayat lengkap,
+pengaruh tiap perubahan, dan metode lanjutan tersedia pada [laporan perkembangan](evolution.md).
+
 ## Hasil utama
 
 Model satu bidang menganggap seluruh papan benar-benar rata. Papan pada dataset mempunyai sambungan lipat. Hipotesis alternatif memperlakukan sisi kiri/kanan sebagai dua bidang planar, dengan matriks K dan distorsi yang sama, tetapi pose terpisah untuk tiap panel pada setiap foto.

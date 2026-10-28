@@ -1,0 +1,9 @@
+{
+  "source": "Keterangan pengguna pada percakapan pengerjaan tugas",
+  "same_camera": true,
+  "same_zoom": true,
+  "focus_mode": "automatic",
+  "camera_pose_varied": true,
+  "lens_mode_independently_verified": false,
+  "note": "Perubahan pose memang diperlukan untuk kalibrasi. Fokus otomatis dapat mengubah intrinsik pada sebagian kamera; kontribusinya pada error dataset ini belum dibuktikan atau diukur."
+}

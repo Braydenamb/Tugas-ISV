@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from isv_calibration.calibration import calibrate, error_metrics, load_config
 from isv_calibration.preprocessing import remeasure
-from isv_calibration.alternatives import correlation_corners
+from isv_calibration.alternatives import correlation_corners, distortion_health
 
 
 def synthetic_checkerboard():
@@ -78,12 +78,27 @@ class MeasurementTests(unittest.TestCase):
 
     def test_correlation_returns_observed_corner_not_noisy_initialization(self):
         image, truth, initial = synthetic_checkerboard()
-        valid = np.mgrid[:7, :7].T.reshape(-1, 2)[:, 0] != 3
-        points, diagnostics = correlation_corners(image, initial.copy(), valid)
-        error = np.linalg.norm((points[valid] - truth[valid]).reshape(-1, 2), axis=1)
-        self.assertEqual(len(diagnostics), 42)
-        self.assertLess(float(error.mean()), 0.8)
-        self.assertLess(float(error.max()), 1.5)
+        columns = np.mgrid[:7, :7].T.reshape(-1, 2)[:, 0]
+        valid = columns != 3
+        for scale, fit_mask in ((100, None), (200, None), (200, columns < 3)):
+            with self.subTest(scale=scale, panel_homography=fit_mask is not None):
+                points, diagnostics = correlation_corners(image, initial.copy(), valid,
+                                                          pixels_per_square=scale, homography_valid=fit_mask)
+                error = np.linalg.norm((points[valid] - truth[valid]).reshape(-1, 2), axis=1)
+                self.assertEqual(len(diagnostics), 42)
+                self.assertLess(float(error.mean()), 0.8)
+                self.assertLess(float(error.max()), 1.5)
+
+    def test_distortion_screen_identifies_a_rational_pole(self):
+        K = np.array([[250., 0, 200], [0, 250., 200], [0, 0, 1]])
+        identity = distortion_health(K, np.zeros(8), (400, 400))
+        self.assertFalse(identity["pole_within_approximate_sensor_extent"])
+        self.assertAlmostEqual(identity["minimum_sampled_jacobian_determinant"], 1., places=6)
+        singular = np.zeros(8)
+        singular[5] = -1.  # denominator 1-r^2 has a pole at r=1
+        health = distortion_health(K, singular, (400, 400))
+        self.assertTrue(health["pole_within_approximate_sensor_extent"])
+        self.assertAlmostEqual(health["positive_radial_denominator_poles"][0], 1.)
 
 
 if __name__ == "__main__":

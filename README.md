@@ -5,6 +5,12 @@ refinement sudut, `calibrateCamera`, plot distorsi, serta mean dan RMS error.
 Dataset bawaan memiliki **29 foto**, pola **7 x 7 sudut dalam** (8 x 8 kotak),
 dan sisi kotak **44 mm**.
 
+Laporan lengkap perubahan metode tersedia di
+[reports/evolution.md](reports/evolution.md) dan
+[PDF perkembangan](reports/Laporan_Perkembangan_Kalibrasi.pdf).
+Laporan memisahkan riwayat dengan jumlah titik/versi berbeda dari eksperimen
+terkontrol, serta mencatat hasil yang tidak membantu atau ditolak.
+
 ## Mulai setelah clone/download
 
 Pasang Python **3.10 atau lebih baru**, lalu buka terminal di folder repo:
@@ -97,6 +103,37 @@ diterapkan. Dataset lain perlu pemeriksaan orientasi dan konfigurasi yang sesuai
 
 Baca `reports/alternatives.md` setelah run, atau [ringkasan penelitian metode](reports/method_study.md).
 Baseline perkuliahan tetap menjadi default; eksperimen tidak menggantinya otomatis.
+
+## Pengujian lanjutan dan laporan otomatis
+
+```bash
+python initialize.py --skip-install --experiment refinement
+```
+
+Instalasi pertama memakai `python initialize.py --experiment refinement`
+(tanpa `--skip-install`). Ini menjalankan ulang metode referensi, menguji
+resolusi perataan/homografi panel dan model distorsi alternatif pada identitas
+titik yang sama, memeriksa singularitas serta Jacobian, lalu memperbarui
+laporan Markdown dan PDF secara otomatis.
+
+Rincian tiap run berada di `reports/refinement.md`; riwayat lengkap pada
+`reports/evolution.md` dan PDF perkembangan. Untuk membangun ulang laporan
+tanpa mengulang pengukuran/kalibrasi:
+
+```bash
+python tools/build_evolution_report.py --results outputs/<folder-run>
+```
+
+Catatan akuisisi pengguna: kamera/zoom sama, fokus otomatis, pose bervariasi.
+Posisi kamera yang berubah memang diperlukan. Fokus otomatis berpotensi
+mengubah intrinsik, tetapi kontribusinya pada error ini belum diukur.
+Sumber kemungkinan tersebut dicatat di `config/acquisition.json`.
+
+Varian 200 piksel/kotak + thin-prism tanpa rational menghasilkan mean sekitar
+0,739 px, RMS 0,996 px dan mean CV 0,736 px pada pengujian internal. Ini belum
+memenuhi acuan <0,5 px. Model rational+prism yang mempunyai error latih kecil
+ditolak untuk rekomendasi seluruh gambar karena pole/pembalikan pemetaan pada
+area uji perkiraan. Tidak ada klaim akurasi pada data independen.
 
 ## Struktur folder
 

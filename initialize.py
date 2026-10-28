@@ -42,9 +42,9 @@ def check_dataset():
 
 def check_dependencies(python):
     probe = (
-        "import json,sys,cv2,numpy,matplotlib; "
+        "import json,sys,cv2,numpy,matplotlib,reportlab; "
         "print(json.dumps({'python':sys.version.split()[0],'opencv':cv2.__version__,"
-        "'numpy':numpy.__version__,'matplotlib':matplotlib.__version__}))"
+        "'numpy':numpy.__version__,'matplotlib':matplotlib.__version__,'reportlab':reportlab.Version}))"
     )
     with tempfile.TemporaryDirectory(prefix="isv-check-") as temporary:
         environment = dict(os.environ, MPLCONFIGDIR=temporary)
@@ -65,7 +65,7 @@ def main(argv=None):
     parser.add_argument("--skip-install", action="store_true", help="Lewati pip; hanya untuk lingkungan yang sudah memiliki dependensi")
     parser.add_argument("--run", action="store_true", help="Jalankan kalibrasi setelah penyiapan berhasil")
     parser.add_argument("--compare", action="store_true", help="Setelah penyiapan, bandingkan baseline dan mild")
-    parser.add_argument("--experiment", choices=("panels",), help="Setelah penyiapan, uji metode dua panel dengan validasi silang")
+    parser.add_argument("--experiment", choices=("panels", "refinement"), help="Setelah penyiapan, uji dua panel atau metode lanjutan")
     args = parser.parse_args(argv)
     if args.check and (args.run or args.compare or args.skip_install or args.experiment):
         parser.error("--check dipakai sendiri agar tidak mengubah atau menjalankan proyek")

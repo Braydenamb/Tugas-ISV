@@ -1,0 +1,749 @@
+{
+  "history": [
+    {
+      "id": "H0",
+      "title": "Deteksi awal, 14 foto",
+      "photos": 14,
+      "points": 686,
+      "mean_px": 3.779167413711548,
+      "rms_px": 6.354951952276291,
+      "square_mm": 42.0,
+      "opencv": "4.11.0",
+      "change": "Deteksi pola lengkap berhasil pada 14 dari 29 foto.",
+      "comparability": "Subset foto dan sebagian koordinat berbeda dari tahap berikutnya; bukan eksperimen terkontrol.",
+      "source": "archive/legacy_project/hasil/hasil_kalibrasi.json",
+      "source_sha256": "6a6aae2560dc823a398aee0bdb23090eec9557de12743927341e92c130be81c3"
+    },
+    {
+      "id": "H1",
+      "title": "Seluruh foto dengan bantuan batas papan",
+      "photos": 29,
+      "points": 1421,
+      "mean_px": 3.2780537605285645,
+      "rms_px": 5.453130625539322,
+      "square_mm": 42.0,
+      "opencv": "5.0.0",
+      "change": "29 foto berhasil dimasukkan memakai penyesuaian deteksi.",
+      "comparability": "Jumlah foto/titik dan versi OpenCV berubah; selisih tidak boleh dianggap efek jumlah foto saja.",
+      "source": "archive/legacy_project/hasil_semua_foto/hasil_kalibrasi.json",
+      "source_sha256": "c9fa3aa1885a1e4ec41dd790be089cfc54268f73ec9b0171ecf06508ad548477"
+    },
+    {
+      "id": "H2",
+      "title": "Audit dan pengukuran ulang sudut",
+      "photos": 29,
+      "points": 1418,
+      "mean_px": 2.3320140838623047,
+      "rms_px": 2.9004907779819624,
+      "square_mm": 42.0,
+      "opencv": "4.11.0",
+      "change": "Penanda yang salah diukur ulang; tiga titik ambigu dikecualikan berdasarkan citra.",
+      "comparability": "Pengukuran dan jumlah titik berubah. Fokus pada koreksi kesalahan yang terlihat.",
+      "source": "archive/legacy_project/hasil_audit/hasil_kalibrasi.json",
+      "source_sha256": "b8f8304a9fc0300536423f1f525d1c1f2c431dd19c6abdf141aeb52a57bc6014"
+    },
+    {
+      "id": "H3",
+      "title": "Ukuran 44 mm dan lingkungan proyek saat ini",
+      "photos": 29,
+      "points": 1418,
+      "mean_px": 2.3287153244018555,
+      "rms_px": 2.8832550374857564,
+      "square_mm": 44.0,
+      "opencv": "5.0.0",
+      "change": "Ukuran kotak dikoreksi menjadi 44 mm; dijalankan ulang dengan OpenCV 5.",
+      "comparability": "Perubahan skala seragam tidak memperbaiki K/distorsi/error. Selisih kecil dari H2 terkait lingkungan/pengolahan, bukan manfaat ukuran baru.",
+      "source": "outputs/installed-environment/calibration.json",
+      "source_sha256": "d2d45f93935a623ef0626a5bb8e1021112f1e8cde82e15b4cf72283cff928f51"
+    },
+    {
+      "id": "H4",
+      "title": "Tambahan Gaussian dan CLAHE",
+      "photos": 29,
+      "points": 1418,
+      "mean_px": 2.3288402557373047,
+      "rms_px": 2.905959636010753,
+      "square_mm": 44.0,
+      "opencv": "5.0.0",
+      "change": "Gaussian 3x3 sigma 0,8 dan CLAHE untuk pencarian sudut.",
+      "comparability": "Dibandingkan dengan H3 pada foto dan identitas titik yang sama; RMS justru meningkat.",
+      "source": "outputs/processing-comparison/mild/calibration.json",
+      "source_sha256": "4321b641085866d67133cd2d4f8cce69ea46bbebb320d68036c57d4efd4bc0b6"
+    }
+  ],
+  "reference_methods": [
+    {
+      "detector": "local_corner",
+      "model": "single_plane",
+      "lens_model": "standard5",
+      "calibration_flags": 0,
+      "photos": 29,
+      "pose_count": 29,
+      "training_points": 1216,
+      "training_mean_px": 2.0947896973934563,
+      "training_rms_px": 2.4491323133403293,
+      "validation_points": 579,
+      "validation_mean_px": 2.1351337908591836,
+      "validation_rms_px": 2.5194378216200324,
+      "K": [
+        [
+          3106.7079729488833,
+          0.0,
+          1530.7884797514032
+        ],
+        [
+          0.0,
+          3110.2312285058215,
+          2157.899330192849
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.29660122273693074,
+        -1.8452817885334198,
+        0.010026116551631133,
+        -0.006575575590354732,
+        3.2190111313267495
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8618084145936655,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9543781977078711,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      }
+    },
+    {
+      "detector": "local_corner",
+      "model": "two_panels",
+      "lens_model": "standard5",
+      "calibration_flags": 0,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.9023771751350356,
+      "training_rms_px": 1.2762213116158303,
+      "validation_points": 579,
+      "validation_mean_px": 0.9679572393792796,
+      "validation_rms_px": 1.4317445669137148,
+      "K": [
+        [
+          3122.6022248644845,
+          0.0,
+          1595.090069203505
+        ],
+        [
+          0.0,
+          3117.525164110045,
+          2119.388062963617
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.3176862640940468,
+        -2.00834493261532,
+        0.006343017446449372,
+        0.0015005677869785428,
+        3.7409674469784546
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8503570383304762,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9884605792970491,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      }
+    },
+    {
+      "detector": "checker_correlation",
+      "model": "single_plane",
+      "lens_model": "standard5",
+      "calibration_flags": 0,
+      "photos": 29,
+      "pose_count": 29,
+      "training_points": 1216,
+      "training_mean_px": 2.023704565133238,
+      "training_rms_px": 2.3380611574614636,
+      "validation_points": 579,
+      "validation_mean_px": 2.011729121259663,
+      "validation_rms_px": 2.3387925912218464,
+      "K": [
+        [
+          3108.1440655142937,
+          0.0,
+          1528.1180061318696
+        ],
+        [
+          0.0,
+          3110.3345798967407,
+          2157.4023715366548
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.2956198463812487,
+        -1.8197239706070365,
+        0.010170300069736642,
+        -0.006974454702890416,
+        3.10763425193214
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8620309897916927,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9499678615082154,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      }
+    },
+    {
+      "detector": "checker_correlation",
+      "model": "two_panels",
+      "lens_model": "standard5",
+      "calibration_flags": 0,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7803402313178307,
+      "training_rms_px": 1.0483092709065887,
+      "validation_points": 579,
+      "validation_mean_px": 0.7882748514265852,
+      "validation_rms_px": 1.0561282840831152,
+      "K": [
+        [
+          3129.7852217722157,
+          0.0,
+          1596.682990302711
+        ],
+        [
+          0.0,
+          3123.734250247661,
+          2114.0545458788843
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.31440117254367483,
+        -1.9654536704420853,
+        0.005992665576247838,
+        0.0013870390056483402,
+        3.581689591025269
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8475141907227544,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9868563882650103,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      }
+    }
+  ],
+  "follow_up_results": [
+    {
+      "detector": "global200",
+      "model": "two_panels",
+      "lens_model": "standard5",
+      "calibration_flags": 0,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7737239086985171,
+      "training_rms_px": 1.050670137908907,
+      "validation_points": 579,
+      "validation_mean_px": 0.7756808385548917,
+      "validation_rms_px": 1.0504410387108987,
+      "K": [
+        [
+          3127.537311474277,
+          0.0,
+          1595.958953539384
+        ],
+        [
+          0.0,
+          3121.907662802104,
+          2115.54560903584
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.31561260613220493,
+        -1.9942549124028048,
+        0.005904146961231243,
+        0.0012766465514250434,
+        3.7102059013470248
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8482932475554295,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9899772498627701,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      },
+      "stage": "measurement",
+      "experiment_id": "global200"
+    },
+    {
+      "detector": "panel100",
+      "model": "two_panels",
+      "lens_model": "standard5",
+      "calibration_flags": 0,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7961368770216053,
+      "training_rms_px": 1.0696144455518848,
+      "validation_points": 579,
+      "validation_mean_px": 0.8047344327609928,
+      "validation_rms_px": 1.0784022586110902,
+      "K": [
+        [
+          3129.8517754380373,
+          0.0,
+          1594.650994470329
+        ],
+        [
+          0.0,
+          3124.025116441305,
+          2112.505475989533
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.31776422913443486,
+        -1.9857259549125803,
+        0.005867532578371514,
+        0.0011055965278665787,
+        3.6025484003037027
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8466706033212068,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.986424790712644,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      },
+      "stage": "measurement",
+      "experiment_id": "panel100"
+    },
+    {
+      "detector": "panel200",
+      "model": "two_panels",
+      "lens_model": "standard5",
+      "calibration_flags": 0,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7743694710355301,
+      "training_rms_px": 1.0517762502606471,
+      "validation_points": 579,
+      "validation_mean_px": 0.7758328817263631,
+      "validation_rms_px": 1.05154450347481,
+      "K": [
+        [
+          3128.006029732997,
+          0.0,
+          1595.5373433918871
+        ],
+        [
+          0.0,
+          3122.5421118837908,
+          2115.4725575977927
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.31516029680869206,
+        -1.98811938121373,
+        0.005935509882732682,
+        0.0012283072772138813,
+        3.684943154625574
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8480374952218974,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9894172919707356,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      },
+      "stage": "measurement",
+      "experiment_id": "panel200"
+    },
+    {
+      "detector": "global100",
+      "model": "two_panels",
+      "lens_model": "four_active_coefficients",
+      "calibration_flags": 128,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.8101625709134265,
+      "training_rms_px": 1.0811018459903703,
+      "validation_points": 579,
+      "validation_mean_px": 0.8219128510334074,
+      "validation_rms_px": 1.0955532553954157,
+      "K": [
+        [
+          3139.522855488649,
+          0.0,
+          1594.6957047742785
+        ],
+        [
+          0.0,
+          3132.4076427271016,
+          2105.612916913912
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.23084451407788423,
+        -0.9105097248548285,
+        0.005608717289255233,
+        0.0010385861164663444,
+        0.0
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.842532862039626,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": -0.5768492778471481,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.04162330905306972,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      },
+      "stage": "distortion",
+      "experiment_id": "fixed_k3"
+    },
+    {
+      "detector": "global100",
+      "model": "two_panels",
+      "lens_model": "rational8",
+      "calibration_flags": 16384,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7788862092818721,
+      "training_rms_px": 1.046986360919822,
+      "validation_points": 579,
+      "validation_mean_px": 0.7860507304942644,
+      "validation_rms_px": 1.0543711888742515,
+      "K": [
+        [
+          3132.6399811583196,
+          0.0,
+          1597.0173191527049
+        ],
+        [
+          0.0,
+          3126.4909905949708,
+          2112.683031086332
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        -2.178416652522841,
+        20.736253123830203,
+        0.005955043364624645,
+        0.0014189929501386902,
+        13.317539854853578,
+        -2.4444362404822377,
+        22.249814388744007,
+        10.092842483282206,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8464718403919645,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9902710259846637,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      },
+      "stage": "distortion",
+      "experiment_id": "rational8"
+    },
+    {
+      "detector": "global100",
+      "model": "two_panels",
+      "lens_model": "polynomial5_plus_prism4",
+      "calibration_flags": 32768,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7461517100700324,
+      "training_rms_px": 0.9950934311155063,
+      "validation_points": 579,
+      "validation_mean_px": 0.7448398736345747,
+      "validation_rms_px": 1.0012540892038357,
+      "K": [
+        [
+          3076.5318287747664,
+          0.0,
+          1600.4152046708884
+        ],
+        [
+          0.0,
+          3082.8022300466814,
+          2103.204562650344
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.28982896944589703,
+        -1.7433675275528395,
+        -0.009637968644307158,
+        0.001570325645969797,
+        2.9876175498197126,
+        0.0,
+        0.0,
+        0.0,
+        0.004476992029038771,
+        -0.02596716609640616,
+        0.022963858465633483,
+        -0.028040253246740157
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.857938076587317,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9772817610854625,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      },
+      "stage": "distortion",
+      "experiment_id": "thin_prism9"
+    },
+    {
+      "detector": "global100",
+      "model": "two_panels",
+      "lens_model": "rational8_plus_prism4",
+      "calibration_flags": 49152,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7440287309398531,
+      "training_rms_px": 0.99290972182686,
+      "validation_points": 579,
+      "validation_mean_px": 0.7493359524473574,
+      "validation_rms_px": 1.0125885325310342,
+      "K": [
+        [
+          3079.0073172205407,
+          0.0,
+          1601.1548566511437
+        ],
+        [
+          0.0,
+          3085.317502644324,
+          2103.8045648537764
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        -5.482924077918339,
+        51.994148425318905,
+        -0.009520120256206325,
+        0.0016586377912527457,
+        -221.9871138877933,
+        -5.7052963024055945,
+        53.34670281587038,
+        -223.47961244992047,
+        0.00473523704166218,
+        -0.028295572802839866,
+        0.02328283219849589,
+        -0.0317024166769611
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [
+          0.4650998468754302
+        ],
+        "approximate_sensor_corner_radius": 0.8575425048436666,
+        "pole_within_approximate_sensor_extent": true,
+        "minimum_sampled_jacobian_determinant": -149.06026073919975,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.009365244536940686,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      },
+      "stage": "distortion",
+      "experiment_id": "rational_prism12"
+    },
+    {
+      "detector": "global200",
+      "model": "two_panels",
+      "lens_model": "polynomial5_plus_prism4",
+      "calibration_flags": 32768,
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7391307706221644,
+      "training_rms_px": 0.9961465719899085,
+      "validation_points": 579,
+      "validation_mean_px": 0.7364117971803215,
+      "validation_rms_px": 0.9962473684102373,
+      "K": [
+        [
+          3073.679785422266,
+          0.0,
+          1603.3109066556574
+        ],
+        [
+          0.0,
+          3080.657343443941,
+          2104.6398124560255
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.2897876969207609,
+        -1.7549772511871733,
+        -0.009929134839666598,
+        0.0022584818594971368,
+        3.0484023510758202,
+        0.0,
+        0.0,
+        0.0,
+        0.0038100302921051953,
+        -0.02784597091702349,
+        0.023364771599961576,
+        -0.029268823388334874
+      ],
+      "distortion_health": {
+        "positive_radial_denominator_poles": [],
+        "approximate_sensor_corner_radius": 0.8595503691944698,
+        "pole_within_approximate_sensor_extent": false,
+        "minimum_sampled_jacobian_determinant": 0.9785337893132673,
+        "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+        "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+      },
+      "stage": "combined",
+      "experiment_id": "global200_thin_prism9"
+    }
+  ],
+  "selected": {
+    "detector": "global200",
+    "model": "two_panels",
+    "lens_model": "polynomial5_plus_prism4",
+    "calibration_flags": 32768,
+    "photos": 29,
+    "pose_count": 58,
+    "training_points": 1216,
+    "training_mean_px": 0.7391307706221644,
+    "training_rms_px": 0.9961465719899085,
+    "validation_points": 579,
+    "validation_mean_px": 0.7364117971803215,
+    "validation_rms_px": 0.9962473684102373,
+    "K": [
+      [
+        3073.679785422266,
+        0.0,
+        1603.3109066556574
+      ],
+      [
+        0.0,
+        3080.657343443941,
+        2104.6398124560255
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "distortion": [
+      0.2897876969207609,
+      -1.7549772511871733,
+      -0.009929134839666598,
+      0.0022584818594971368,
+      3.0484023510758202,
+      0.0,
+      0.0,
+      0.0,
+      0.0038100302921051953,
+      -0.02784597091702349,
+      0.023364771599961576,
+      -0.029268823388334874
+    ],
+    "distortion_health": {
+      "positive_radial_denominator_poles": [],
+      "approximate_sensor_corner_radius": 0.8595503691944698,
+      "pole_within_approximate_sensor_extent": false,
+      "minimum_sampled_jacobian_determinant": 0.9785337893132673,
+      "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+      "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+    },
+    "stage": "combined",
+    "experiment_id": "global200_thin_prism9"
+  },
+  "selection_rule": "lowest internal CV RMS among models passing limited numerical screen",
+  "versions": {
+    "opencv": "5.0.0",
+    "numpy": "2.5.4",
+    "python": "3.14.8"
+  },
+  "acquisition": {
+    "source": "Keterangan pengguna pada percakapan pengerjaan tugas",
+    "same_camera": true,
+    "same_zoom": true,
+    "focus_mode": "automatic",
+    "camera_pose_varied": true,
+    "lens_mode_independently_verified": false,
+    "note": "Perubahan pose memang diperlukan untuk kalibrasi. Fokus otomatis dapat mengubah intrinsik pada sebagian kamera; kontribusinya pada error dataset ini belum dibuktikan atau diukur."
+  },
+  "source_summary_sha256": "062d4c38b1f913cc8b8e994c2b9e497699c5f8e7139251d42e834ee689842626"
+}

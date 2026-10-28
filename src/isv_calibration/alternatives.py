@@ -10,6 +10,38 @@ import numpy as np
 from .calibration import ROOT, calibrate, error_metrics, find_images
 
 
+def distortion_health(K, distortion, image_size):
+    """Screen rational denominator poles; sensor-radius extent is approximate."""
+    coefficients = np.zeros(8)
+    flat = np.asarray(distortion).ravel()
+    coefficients[:min(8, len(flat))] = flat[:8]
+    roots = np.roots([coefficients[7], coefficients[6], coefficients[5], 1.0])
+    poles = sorted(float(np.sqrt(x.real)) for x in roots if abs(x.imag) < 1e-6 and x.real > 0)
+    width, height = image_size
+    corners = np.array([[0, 0], [width-1, 0], [width-1, height-1], [0, height-1]])
+    radius = float(np.linalg.norm((corners - K[:2, 2]) / np.diag(K)[:2], axis=1).max())
+    xs = np.linspace(-K[0, 2]/K[0, 0], (width-1-K[0, 2])/K[0, 0], 31)
+    ys = np.linspace(-K[1, 2]/K[1, 1], (height-1-K[1, 2])/K[1, 1], 31)
+    xx, yy = np.meshgrid(xs, ys)
+    points = np.column_stack([xx.ravel(), yy.ravel(), np.ones(xx.size)]).astype(np.float64)
+    def project(p):
+        image, _ = cv.projectPoints(p, np.zeros(3), np.zeros(3), np.eye(3), flat)
+        return image.reshape(-1, 2)
+    step = 1e-5
+    dx = np.array([step, 0.0, 0.0])
+    dy = np.array([0.0, step, 0.0])
+    derivative_x = (project(points+dx)-project(points-dx))/(2*step)
+    derivative_y = (project(points+dy)-project(points-dy))/(2*step)
+    determinant = derivative_x[:, 0]*derivative_y[:, 1]-derivative_x[:, 1]*derivative_y[:, 0]
+    finite = np.isfinite(determinant)
+    return {"positive_radial_denominator_poles": poles,
+            "approximate_sensor_corner_radius": radius,
+            "pole_within_approximate_sensor_extent": any(pole < radius for pole in poles),
+            "minimum_sampled_jacobian_determinant": float(determinant[finite].min()) if finite.any() else None,
+            "nonpositive_or_nonfinite_jacobian_fraction": float(np.mean(~finite | (determinant <= 0))),
+            "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."}
+
+
 def panel_masks(valid, axis):
     """Exclude the physical center seam uniformly, never using residuals."""
     grid = np.mgrid[:7, :7].T.reshape(-1, 2)
@@ -19,20 +51,29 @@ def panel_masks(valid, axis):
     return [valid & (coordinate < 3), valid & (coordinate > 3)]
 
 
-def correlation_corners(gray, initial, valid):
+def correlation_corners(gray, initial, valid, *, pixels_per_square=100, homography_valid=None):
     """Measure actual four-quadrant checker intensity using normalized correlation.
 
     No fitted camera projections are used. Pixel templates are evaluated on the
     photograph; a local quadratic interpolates the peak of their response.
     """
+    if not isinstance(pixels_per_square, int) or pixels_per_square < 50:
+        raise ValueError("Resolusi perataan harus bilangan bulat minimal 50 piksel/kotak")
     grid = np.mgrid[:7, :7].T.reshape(-1, 2).astype(np.float32)
-    H, _ = cv.findHomography(grid, initial.reshape(-1, 2), cv.RANSAC, 8.0)
+    fit_mask = np.ones(49, dtype=bool) if homography_valid is None else np.asarray(homography_valid, dtype=bool)
+    if fit_mask.shape != (49,) or fit_mask.sum() < 4:
+        raise ValueError("Inisialisasi homografi memerlukan minimal empat titik")
+    H, _ = cv.findHomography(grid[fit_mask], initial.reshape(-1, 2)[fit_mask], cv.RANSAC, 8.0)
     if H is None:
         raise ValueError("Homografi daerah pencarian korelasi gagal")
-    W = np.float64([[100, 0, 200], [0, 100, 200], [0, 0, 1]])
+    scale = pixels_per_square
+    W = np.float64([[scale, 0, 2*scale], [0, scale, 2*scale], [0, 0, 1]])
     mapping = W @ np.linalg.inv(H)
-    warp = cv.warpPerspective(gray, mapping, (1000, 1000))
-    u = np.arange(32) - 15.5
+    warp = cv.warpPerspective(gray, mapping, (10*scale, 10*scale))
+    template_size = 2 * round(0.16 * scale)
+    radius = round(0.24 * scale)
+    half_patch = radius + template_size // 2
+    u = np.arange(template_size) - (template_size-1)/2
     xx, yy = np.meshgrid(u, u)
     template = np.sign(xx * yy).astype(np.float32)
     ys, xs = np.mgrid[-1:2, -1:2]
@@ -42,20 +83,21 @@ def correlation_corners(gray, initial, valid):
     for index, (gx, gy) in enumerate(grid):
         if not valid[index]:
             continue
-        x, y = int(200 + gx * 100), int(200 + gy * 100)
-        patch = warp[y-40:y+40, x-40:x+40].astype(np.float32)
+        x, y = int(2*scale + gx*scale), int(2*scale + gy*scale)
+        patch = warp[y-half_patch:y+half_patch, x-half_patch:x+half_patch].astype(np.float32)
         score = np.abs(cv.matchTemplate(patch, template, cv.TM_CCOEFF_NORMED))
         iy, ix = np.unravel_index(np.argmax(score), score.shape)
-        if ix in (0, 48) or iy in (0, 48):
+        if ix in (0, 2*radius) or iy in (0, 2*radius):
             raise ValueError(f"Sudut {index}: puncak korelasi di batas, perlu audit")
         a, b, c, d, e, _ = np.linalg.lstsq(design, score[iy-1:iy+2, ix-1:ix+2].ravel(), rcond=None)[0]
         hessian = np.array([[2*a, b], [b, 2*c]])
         delta = np.linalg.solve(hessian, -np.array([d, e])) if np.linalg.det(hessian) > 1e-10 and a < 0 else np.zeros(2)
         if np.max(np.abs(delta)) > 1:
             delta[:] = 0
-        measured.append([x-24.5+ix+delta[0], y-24.5+iy+delta[1]])
+        measured.append([x-radius-0.5+ix+delta[0], y-radius-0.5+iy+delta[1]])
         indices.append(index)
-        diagnostics.append({"point_index": int(index), "correlation": float(score[iy, ix]), "subpixel_offset": delta.tolist()})
+        diagnostics.append({"point_index": int(index), "correlation": float(score[iy, ix]),
+                            "subpixel_offset": delta.tolist(), "pixels_per_square": scale})
     result = initial.copy()
     if measured:
         result[indices] = cv.perspectiveTransform(np.float32(measured).reshape(-1, 1, 2), np.linalg.inv(mapping))
@@ -77,15 +119,15 @@ def _views(data, indices, model):
     return views
 
 
-def _fit(data, indices, model):
+def _fit(data, indices, model, flags=0):
     views = _views(data, indices, model)
     rms, K, D, rotations, translations = cv.calibrateCamera(
-        [v["object"] for v in views], [v["image"] for v in views], tuple(data["image_size"]), None, None
+        [v["object"] for v in views], [v["image"] for v in views], tuple(data["image_size"]), None, None, flags=flags
     )
     return views, rms, K, D, rotations, translations
 
 
-def _cross_validate(data, model, folds=5):
+def _cross_validate(data, model, folds=5, flags=0):
     """Hold out photographs for K/D; held-out pose uses alternate anchors only."""
     all_indices = list(range(len(data["files"])))
     grid = np.mgrid[:7, :7].T.reshape(-1, 2)
@@ -96,10 +138,11 @@ def _cross_validate(data, model, folds=5):
         training = [i for i in all_indices if i not in held_out]
         if set(training) & set(held_out):
             raise AssertionError("Training/validation image leakage")
-        _, _, K, D, _, _ = _fit(data, training, model)
+        _, _, K, D, _, _ = _fit(data, training, model, flags)
         plan = {"fold": fold + 1, "training_files": [str(data["files"][i]) for i in training],
                 "held_out_files": [str(data["files"][i]) for i in held_out],
-                "K": K.tolist(), "distortion": D.ravel().tolist(), "pose_groups": []}
+                "K": K.tolist(), "distortion": D.ravel().tolist(),
+                "distortion_health": distortion_health(K, D, data["image_size"]), "pose_groups": []}
         for view in _views(data, held_out, model):
             index, mask = view["photo"], view["mask"]
             anchor, evaluation = mask & anchor_pattern, mask & ~anchor_pattern
@@ -132,24 +175,26 @@ def _write_csv(path, rows):
         writer.writerows(rows)
 
 
-def _study_candidate(data, detector, model, output):
+def _study_candidate(data, detector, model, output, flags=0, lens_model="standard5"):
     output.mkdir(parents=True)
-    views, rms, K, D, rotations, translations = _fit(data, range(len(data["files"])), model)
+    views, rms, K, D, rotations, translations = _fit(data, range(len(data["files"])), model, flags)
     training_rows = []
     for view, rotation, translation in zip(views, rotations, translations):
         projected, _ = cv.projectPoints(view["object"], rotation, translation, K, D)
         errors, _ = error_metrics(view["image"], projected)
         for point, error in zip(np.flatnonzero(view["mask"]), errors):
             training_rows.append({"file": str(data["files"][view["photo"]]), "point_index": int(point), "error_px": float(error)})
-    held_rows, plans = _cross_validate(data, model)
+    held_rows, plans = _cross_validate(data, model, flags=flags)
     training_errors = np.array([r["error_px"] for r in training_rows])
     held_errors = np.array([r["error_px"] for r in held_rows])
     if not np.isclose(np.sqrt(np.mean(training_errors ** 2)), rms, atol=1e-4):
         raise AssertionError("Recomputed RMS mismatch")
-    result = {"detector": detector, "model": model, "photos": len(data["files"]), "pose_count": len(views),
+    result = {"detector": detector, "model": model, "lens_model": lens_model, "calibration_flags": int(flags),
+              "photos": len(data["files"]), "pose_count": len(views),
               "training_points": len(training_rows), "training_mean_px": float(training_errors.mean()), "training_rms_px": float(rms),
               "validation_points": len(held_rows), "validation_mean_px": float(held_errors.mean()),
-              "validation_rms_px": float(np.sqrt(np.mean(held_errors ** 2))), "K": K.tolist(), "distortion": D.ravel().tolist()}
+              "validation_rms_px": float(np.sqrt(np.mean(held_errors ** 2))), "K": K.tolist(), "distortion": D.ravel().tolist(),
+              "distortion_health": distortion_health(K, D, data["image_size"])}
     np.savez_compressed(output / "parameters.npz", K=K, distortion=D, rvecs=np.array(rotations), tvecs=np.array(translations),
                         files=data["files"], image_points=data["image_points"], object_points=data["object_points"],
                         view_photo_indices=np.array([v["photo"] for v in views]), view_masks=np.array([v["mask"] for v in views]),

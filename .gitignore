@@ -18,6 +18,8 @@ dist/
 /reports/latest_run.json
 /reports/comparison.md
 /reports/alternatives.md
+/reports/refinement.md
+/reports/refinement_run.json
 
 # Local editor / operating-system files and credentials
 .idea/

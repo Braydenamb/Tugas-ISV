@@ -17,7 +17,7 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, help="Folder run baru; tidak menimpa run yang sudah ada")
     parser.add_argument("--preprocessing", choices=PROFILES)
     parser.add_argument("--compare", action="store_true", help="Hitung baseline dan mild pada dataset yang sama")
-    parser.add_argument("--experiment", choices=("panels",), help="Uji model dua panel dan detektor korelasi dengan validasi silang")
+    parser.add_argument("--experiment", choices=("panels", "refinement"), help="Uji dua panel atau metode lanjutan dengan validasi silang")
     args = parser.parse_args(argv)
     try:
         config = load_config(args.config)
@@ -32,9 +32,15 @@ def main(argv=None):
         if args.experiment:
             if args.compare or args.preprocessing:
                 raise ValueError("--experiment dipakai terpisah dari --compare/--preprocessing")
-            from .alternatives import run_panel_study
-            run_panel_study(config, photos, output)
-            print(f"\nEksperimen selesai. Hasil: {output}\nLaporan: {ROOT / 'reports/alternatives.md'}")
+            if args.experiment == "panels":
+                from .alternatives import run_panel_study
+                run_panel_study(config, photos, output)
+                report = ROOT / "reports/alternatives.md"
+            else:
+                from .refinement import run_refinement_study
+                run_refinement_study(config, photos, output)
+                report = ROOT / "reports/refinement.md"
+            print(f"\nEksperimen selesai. Hasil: {output}\nLaporan: {report}")
             return 0
         if args.compare:
             results = {}
