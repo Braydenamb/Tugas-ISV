@@ -7,3 +7,4 @@
 *.png -text
 *.pdf -text
 *.npz -text
+*.zip -text

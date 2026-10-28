@@ -1,0 +1,53 @@
+{
+  "detector": "local_corner",
+  "model": "whole_board",
+  "lens_model": "standard5",
+  "calibration_flags": 0,
+  "photos": 29,
+  "pose_count": 29,
+  "training_points": 1418,
+  "training_mean_px": 2.3287153421771123,
+  "training_rms_px": 2.8832550374857533,
+  "validation_points": 694,
+  "validation_mean_px": 2.4834668410979535,
+  "validation_rms_px": 3.1032730578012693,
+  "K": [
+    [
+      3101.1351473750888,
+      0.0,
+      1528.363272832244
+    ],
+    [
+      0.0,
+      3104.6340964596675,
+      2161.054580698184
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion": [
+    0.2920318775435918,
+    -1.8008786084790074,
+    0.010743364471076025,
+    -0.0066564039641559365,
+    3.0546408623967185
+  ],
+  "distortion_health": {
+    "positive_radial_denominator_poles": [],
+    "approximate_sensor_corner_radius": 0.8646424356116549,
+    "pole_within_approximate_sensor_extent": false,
+    "minimum_sampled_jacobian_determinant": 0.9463634716892665,
+    "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+    "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+  },
+  "nama": "Deteksi dan audit sudut",
+  "nomor_tahap": 1,
+  "versions": {
+    "python": "3.14.8",
+    "opencv": "5.0.0",
+    "numpy": "2.5.4"
+  }
+}

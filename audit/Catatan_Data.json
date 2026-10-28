@@ -1,0 +1,40 @@
+{
+  "square_size_mm": 44.0,
+  "acquisition": {
+    "source": "Keterangan pengguna pada percakapan pengerjaan tugas",
+    "same_camera": true,
+    "same_zoom": true,
+    "focus_mode": "automatic",
+    "camera_pose_varied": true,
+    "lens_mode_independently_verified": false,
+    "note": "Perubahan pose memang diperlukan untuk kalibrasi. Fokus otomatis dapat mengubah intrinsik pada sebagian kamera; kontribusinya pada error dataset ini belum dibuktikan atau diukur."
+  },
+  "excluded_points": [
+    {
+      "file": "IMG-20261026-WA0101.jpg",
+      "index": 45,
+      "row": 7,
+      "col": 4,
+      "reason": "Penanda jatuh pada tekstur/pantulan di sisi celah papan; persilangan tunggal empat kotak tidak dapat ditetapkan dengan yakin dari gambar."
+    },
+    {
+      "file": "IMG-20261026-WA0089.jpg",
+      "index": 48,
+      "row": 7,
+      "col": 7,
+      "reason": "Pantulan kuat menutupi batas warna; penanda tertarik pada tekstur kayu dan posisi sudut tidak dapat ditetapkan dengan yakin."
+    },
+    {
+      "file": "IMG-20261026-WA0094.jpg",
+      "index": 37,
+      "row": 6,
+      "col": 3,
+      "reason": "Pantulan dan tekstur mengaburkan pertemuan empat kotak; lokalisasi sudut tidak dapat dipastikan dari gambar."
+    }
+  ],
+  "versions": {
+    "python": "3.14.8",
+    "opencv": "5.0.0",
+    "numpy": "2.5.4"
+  }
+}

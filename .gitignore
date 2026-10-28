@@ -1,36 +1,22 @@
-# Local environments and Python caches
+# Hanya lingkungan lokal, cache, dan cadangan teknis yang tidak dibagikan
 .venv/
 venv/
 __pycache__/
 *.py[cod]
-.pytest_cache/
-*.egg-info/
-build/
-dist/
-
-# Generated runs, local experiments, and recovered historical files
-/outputs/
-/archive/
-/tmp/
 .cache/
-*.log
-/reports/latest.md
-/reports/latest_run.json
-/reports/comparison.md
-/reports/alternatives.md
-/reports/refinement.md
-/reports/refinement_run.json
+.cadangan_teknis/
 
-# Local editor / operating-system files and credentials
+# Berkas lokal editor dan kredensial
 .idea/
 .vscode/
 .DS_Store
 Thumbs.db
 .env
 .env.*
-!.env.example
 *.pem
 *.key
 .aws/
 .agents/
 .codex/
+
+# Foto, data, audit, dan laporan sengaja TIDAK di-ignore.

@@ -1,0 +1,53 @@
+{
+  "detector": "local_corner",
+  "model": "single_plane",
+  "lens_model": "standard5",
+  "calibration_flags": 0,
+  "photos": 29,
+  "pose_count": 29,
+  "training_points": 1216,
+  "training_mean_px": 2.0947896973934563,
+  "training_rms_px": 2.4491323133403315,
+  "validation_points": 579,
+  "validation_mean_px": 2.135134093566365,
+  "validation_rms_px": 2.5194387974909125,
+  "K": [
+    [
+      3106.7079715806594,
+      0.0,
+      1530.7884789978195
+    ],
+    [
+      0.0,
+      3110.2312274277724,
+      2157.899333127748
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion": [
+    0.29660122197005717,
+    -1.845281794175364,
+    0.010026116737726078,
+    -0.006575575722323986,
+    3.2190111907463748
+  ],
+  "distortion_health": {
+    "positive_radial_denominator_poles": [],
+    "approximate_sensor_corner_radius": 0.861808415824389,
+    "pole_within_approximate_sensor_extent": false,
+    "minimum_sampled_jacobian_determinant": 0.9543781997074714,
+    "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+    "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+  },
+  "nama": "Abaikan garis sambungan",
+  "nomor_tahap": 2,
+  "versions": {
+    "python": "3.14.8",
+    "opencv": "5.0.0",
+    "numpy": "2.5.4"
+  }
+}
