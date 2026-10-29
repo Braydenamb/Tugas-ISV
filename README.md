@@ -4,9 +4,10 @@
 Tidak perlu memasang atau menjalankan apa pun jika hanya ingin membaca.
 Daftar isi dan daftar gambar di Word dapat diperbarui dengan `Ctrl+A`, lalu `F9`.
 Versi Word disiapkan dari hasil perhitungan terakhir dan dapat diedit langsung.
-Laporan diawali sampul, daftar isi, dan daftar gambar. Enam halaman isi memuat
-pendahuluan dan foto utuh, alur pengukuran, lokalisasi sudut, galat reproyeksi,
-hasil kalibrasi, dan perbandingan modifikasi. Gambar 1-6 diberi judul;
+Laporan Word diawali sampul, daftar isi, dan daftar gambar. Bab I berisi dasar teori
+singkat tentang kamera, parameter kalibrasi, distorsi, papan catur, dan galat reproyeksi.
+Bab berikutnya memuat data dan foto utuh, alur pengukuran, lokalisasi sudut,
+evaluasi, hasil kalibrasi, serta pembahasan metode. Gambar 1-6 diberi judul;
 nomor halaman pada kedua daftar dibuat otomatis.
 Penjelasan ditulis dalam paragraf naratif singkat dengan bahasa baku dan lugas.
 Gambar tersedia pula di

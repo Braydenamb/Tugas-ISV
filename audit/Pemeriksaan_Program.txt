@@ -27,3 +27,12 @@ Pemeriksaan versi Word:
 - Laporan.docx memuat teks yang dapat disunting, enam gambar, field daftar isi/daftar gambar dan nomor halaman.
 - Hasil render sembilan halaman diperiksa seluruhnya; sampul tanpa garis dekoratif dan penomoran i-ii serta 1-6 sesuai.
 - Dokumen dibuat dari hasil perhitungan terakhir; program perhitungan tetap memperbarui audit dan PDF.
+
+Pembaruan Bab I Dasar Teori:
+- Lima subbab teori singkat berdasarkan materi kuliah; data pengamatan dipisahkan ke Bab II.
+- Word sepuluh halaman telah dirender dan diperiksa seluruhnya; daftar isi, gambar, dan nomor halaman disesuaikan.
+
+Pembaruan format Word 14 dan 12 pt:
+- Judul utama/bab 14 pt; subbab, paragraf, caption, dan daftar 12 pt.
+- Setiap bab dimulai pada halaman baru; Bab I Dasar Teori dan Bab II Data Pengamatan terpisah.
+- Sepuluh halaman akhir dirender dan diperiksa; tidak ada halaman sisa acuan atau teks terpotong.
