@@ -2,6 +2,9 @@
 
 **Untuk membaca hasil, langsung buka [laporan/Laporan.pdf](laporan/Laporan.pdf).**
 Tidak perlu memasang atau menjalankan apa pun jika hanya ingin membaca.
+Halaman 2-3 memperlihatkan batas papan kuning, sudut, dua panel,
+perataan gambar, dan pembesaran selisih pengukuran dengan proyeksi model.
+Gambar juga tersedia di `audit/06_hasil_akhir/Visual_Proses.png` dan `Visual_Detail.png`.
 
 ## Menghitung ulang
 

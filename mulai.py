@@ -361,6 +361,87 @@ def ukur_korelasi(data, resolusi):
     return hasil
 
 
+def buat_visualisasi(pengaturan):
+    """Gambar penjelas dari hasil tersimpan; tidak mengubah kalibrasi."""
+    folder = ROOT / "audit/06_hasil_akhir"
+    with np.load(ROOT / "audit/01_deteksi/parameter.npz", allow_pickle=False) as z:
+        files, awal = z["files"].copy(), z["image_points"].copy()
+    with np.load(folder / "parameter.npz", allow_pickle=False) as z:
+        akhir = {k: z[k].copy() for k in z.files}
+    nama = "IMG-20261026-WA0103.jpg"  # Contoh tetap, bukan dipilih berdasarkan error.
+    i = list(files).index(nama)
+    rgb = cv.cvtColor(cv.imread(str(ROOT / "foto" / nama)), cv.COLOR_BGR2RGB)
+    pts = awal[i].reshape(-1, 2)
+    ukur = akhir["image_points"][i].reshape(-1, 2)
+    grid = np.mgrid[:7, :7].T.reshape(-1, 2).astype(np.float32)
+    H, _ = cv.findHomography(grid, pts, cv.RANSAC, 8.0)
+    batas = cv.perspectiveTransform(np.float32([[[-1,-1],[7,-1],[7,7],[-1,7],[-1,-1]]]), H)[0]
+    valid = np.ones(49, dtype=bool)
+    for e in pengaturan["excluded_points"]:
+        if e["file"] == nama: valid[e["index"]] = False
+    a, b = panel_masks(valid, pengaturan["panel_axes"][nama])
+    dipakai = a | b
+    proyeksi = np.full((49, 2), np.nan)
+    for v in np.flatnonzero(akhir["view_photo_indices"] == i):
+        mask = akhir["view_masks"][v]
+        q, _ = cv.projectPoints(akhir["object_points"][i][mask], akhir["rvecs"][v],
+                                akhir["tvecs"][v], akhir["K"], akhir["distortion"])
+        proyeksi[mask] = q.reshape(-1, 2)
+    low, high = batas.min(axis=0)-90, batas.max(axis=0)+90
+    def foto(ax, judul):
+        ax.imshow(rgb);ax.set_xlim(low[0],high[0]);ax.set_ylim(high[1],low[1])
+        ax.set_title(judul, fontsize=12);ax.axis("off")
+    def simpan(fig, nama):
+        fig.tight_layout(pad=1.4)
+        path = folder / nama
+        fig.savefig(path, dpi=180, facecolor="white");plt.close(fig)
+        return path
+    fig, axes = plt.subplots(2, 2, figsize=(8.4, 8.1))
+    foto(axes[0,0], "A. Foto asli (dipotong untuk tampilan)")
+    foto(axes[0,1], "B. Perkiraan batas + 49 sudut dalam")
+    axes[0,1].plot(*batas.T, color="yellow", lw=2)
+    axes[0,1].scatter(*pts.T, s=10, color="#00ffff")
+    foto(axes[1,0], "C. Dua panel; celah tidak dipakai")
+    for mask, warna, label in [(a,"#00ffff","Panel A"),(b,"#ff55dd","Panel B"),(~dipakai,"#ffad00","Dikecualikan")]:
+        axes[1,0].scatter(*pts[mask].T, s=15, c=warna, label=label)
+    axes[1,0].legend(fontsize=8, loc="lower left")
+    foto(axes[1,1], "D. Pengukuran akhir dan proyeksi model")
+    axes[1,1].scatter(*ukur[dipakai].T, s=24, facecolors="none", edgecolors="#00ff66", label="Ukur: lingkaran")
+    axes[1,1].scatter(*proyeksi[dipakai].T, s=12, c="#ff4040", marker="x", label="Proyeksi: silang")
+    axes[1,1].legend(fontsize=8, loc="lower left")
+    alur = simpan(fig, "Visual_Proses.png")
+    fig, axes = plt.subplots(2, 2, figsize=(8.4, 6.8))
+    gray = cv.cvtColor(rgb, cv.COLOR_RGB2GRAY)
+    for ax, skala in zip(axes[0], [100, 200]):
+        W = np.float64([[skala,0,2*skala],[0,skala,2*skala],[0,0,1]])
+        warp = cv.warpPerspective(gray, W @ np.linalg.inv(H), (10*skala,10*skala))
+        ax.imshow(warp, cmap="gray", vmin=0, vmax=255)
+        ax.set_xlim(skala,9*skala);ax.set_ylim(9*skala,skala)
+        ax.set_title(f"Perataan pencarian: {skala} px/kotak", fontsize=11);ax.axis("off")
+    galat = np.linalg.norm(proyeksi[dipakai]-ukur[dipakai], axis=1)
+    j = np.flatnonzero(dipakai)[np.argsort(galat)[len(galat)//2]]
+    ax = axes[1,0];ax.imshow(rgb)
+    ax.scatter(*ukur[j], s=100, facecolors="none", edgecolors="#00ff66", linewidths=2, label="Ukur")
+    ax.scatter(*proyeksi[j], s=65, c="#ff4040", marker="x", linewidths=2, label="Proyeksi")
+    ax.plot([ukur[j,0],proyeksi[j,0]], [ukur[j,1],proyeksi[j,1]], color="yellow")
+    ax.set_xlim(ukur[j,0]-12,ukur[j,0]+12);ax.set_ylim(ukur[j,1]+12,ukur[j,1]-12)
+    ax.set_title(f"Sudut #{j+1}: jarak {np.linalg.norm(proyeksi[j]-ukur[j]):.3f} px", fontsize=11)
+    ax.tick_params(labelsize=7);ax.set_xlabel("Koordinat foto asli (px)",fontsize=8);ax.legend(fontsize=8)
+    ax = axes[1,1];foto(ax, "Arah selisih proyeksi (panah x30)")
+    delta = (proyeksi[dipakai]-ukur[dipakai])*30
+    ax.scatter(*ukur[dipakai].T, s=7, c="#00ff66")
+    ax.quiver(*ukur[dipakai].T, *delta.T, angles="xy", scale_units="xy", scale=1,
+              color="#ff4040", width=.005)
+    detail = simpan(fig, "Visual_Detail.png")
+    (folder / "Visual_Keterangan.json").write_text(json.dumps({
+        "file": nama, "corner_index_zero_based": int(j), "corner_error_px": float(np.linalg.norm(proyeksi[j]-ukur[j])),
+        "example_selection": "fixed filename; corner nearest median error in this photo",
+        "arrows_scale": 30, "boundary": "homography extrapolation from internal grid; not measured outer edge",
+        "residuals": "training residuals; not independent validation",
+    }, indent=2), encoding="utf-8")
+    return nama, alur, detail
+
+
 def buat_laporan(pengaturan, tahap):
     """Hasil belajar berupa satu ringkasan dan satu PDF, tanpa pilihan laporan."""
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Image, Preformatted, Spacer, PageBreak
@@ -381,6 +462,7 @@ def buat_laporan(pengaturan, tahap):
     folder = ROOT / "laporan"
     folder.mkdir(exist_ok=True)
     akhir = tahap[-1]
+    contoh, visual_alur, visual_detail = buat_visualisasi(pengaturan)
     fig, ax = plt.subplots(figsize=(9, 4))
     x = np.arange(6)
     ax.bar(x-.18, [r["training_mean_px"] for r in tahap], .36, label="Mean kalibrasi")
@@ -423,6 +505,19 @@ def buat_laporan(pengaturan, tahap):
     p("Tahap 1 memakai 1.418 pengamatan setelah tiga sudut ambigu dikecualikan berdasarkan citra. Tahap 2 mengabaikan semua titik di celah tengah secara seragam, sehingga tersisa 1.216 titik. Tahap 2-6 memakai identitas titik dan 579 titik evaluasi yang sama; tahap 1 memiliki jumlah titik berbeda. CV berarti validasi silang.")
     p("Pengukuran sudut tetap berasal dari gambar. Homografi hanya membantu pencarian; koordinat dikembalikan ke piksel foto asli. Tidak ada titik dipindahkan ke tebakan model atau dibuang berdasarkan besarnya error.")
     cerita.append(PageBreak())
+    p("Visualisasi A - Dari foto ke hasil pengukuran", judul)
+    p(f"Foto contoh tetap: {contoh}. Urutan A-D memakai foto yang sama agar setiap perubahan dapat dibandingkan. Gambar dipotong hanya untuk memperjelas papan; perhitungan tetap memakai koordinat foto asli.")
+    cerita.append(Image(str(visual_alur), width=500, height=482))
+    p("Kuning: perkiraan batas papan melalui perpanjangan kisi sudut dalam, bukan deteksi tepi atau ukuran tepi yang diukur. Biru muda: sudut/panel A; merah muda: panel B; oranye: celah atau titik yang dikecualikan. Warna panel adalah kelompok model, bukan bukti pengukuran kelengkungan papan.")
+    p("Hijau adalah titik yang diukur dari foto; silang merah adalah hasil proyeksi model akhir. Pada skala seluruh papan keduanya hampir bertumpuk. Selisihnya diperjelas pada halaman berikutnya.")
+    cerita.append(PageBreak())
+    p("Visualisasi B - Perataan dan arti error", judul)
+    cerita.append(Image(str(visual_detail), width=500, height=405))
+    p("Atas: citra dipetakan sementara ke kisi yang tampak dari depan untuk mempermudah pencarian pola. Resolusi 100 dan 200 piksel per kotak berarti kerapatan sampel proses, bukan foto baru atau tambahan detail sensor. Koordinat hasil pencarian dikembalikan ke foto asli; citra rata ini tidak dipakai untuk menyatakan bahwa papan benar-benar datar.")
+    p("Kiri bawah: pembesaran satu sudut dengan error paling dekat median pada foto contoh. Jarak lingkaran hijau ke silang merah adalah error sudut tersebut dalam piksel asli. Nilainya berbeda dari mean seluruh titik dan seluruh foto.")
+    p("Kanan bawah: panah dari titik ukur menuju proyeksi diperpanjang 30 kali supaya arah selisih terbaca. Angka error tetap memakai jarak sebenarnya, tidak dikalikan 30. Gambar menunjukkan residual kalibrasi pada data yang dipakai melatih model; angka validasi silang dilaporkan terpisah.")
+    p("Seluruh gambar ini dibuat otomatis oleh mulai.py dan tersimpan di audit/06_hasil_akhir/Visual_Proses.png serta Visual_Detail.png. Penanda hanya menjelaskan hasil, tidak menggeser sudut atau menurunkan error.")
+    cerita.append(PageBreak())
     p("2. Hasil akhir", judul)
     p(f"Seluruh 29 foto dipakai. Mean error {akhir['training_mean_px']:.6f} piksel; RMS {akhir['training_rms_px']:.6f} piksel. Mean validasi silang {akhir['validation_mean_px']:.6f}; RMS validasi {akhir['validation_rms_px']:.6f} piksel.")
     p("Matriks intrinsik K dalam piksel:")
@@ -450,6 +545,7 @@ def buat_laporan(pengaturan, tahap):
           '| Tahap | Perubahan | Titik | Mean px | RMS px | Mean CV |', '|---|---|---:|---:|---:|---:|']
     md += ['| '+' | '.join(r)+' |' for r in rows[1:]]
     md += ['', 'Tahap 2-6 memakai 1.216 titik yang sama. Mean dan RMS berbeda; hasil masih belum memenuhi acuan <0,5 px.', '',
+           'Visual tahapan dan pembesaran error ada di halaman 2-3 PDF serta `audit/06_hasil_akhir/Visual_Proses.png` dan `Visual_Detail.png`.', '',
            'Semua audit ikut Git pada folder `audit/`. Riwayat lama ada dalam `audit/Riwayat_Audit.zip`.', '',
            'Kamera dan zoom sama, fokus otomatis, pose bervariasi menurut keterangan pengguna. Kontribusi autofocus belum diukur.', '']
     (folder / "Ringkasan.md").write_text('\n'.join(md), encoding='utf-8')

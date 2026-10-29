@@ -13,6 +13,8 @@ Jalankan `python mulai.py`, lalu buka `laporan/Laporan.pdf`.
 
 Tahap 2-6 memakai 1.216 titik yang sama. Mean dan RMS berbeda; hasil masih belum memenuhi acuan <0,5 px.
 
+Visual tahapan dan pembesaran error ada di halaman 2-3 PDF serta `audit/06_hasil_akhir/Visual_Proses.png` dan `Visual_Detail.png`.
+
 Semua audit ikut Git pada folder `audit/`. Riwayat lama ada dalam `audit/Riwayat_Audit.zip`.
 
 Kamera dan zoom sama, fokus otomatis, pose bervariasi menurut keterangan pengguna. Kontribusi autofocus belum diukur.
