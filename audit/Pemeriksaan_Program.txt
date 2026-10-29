@@ -14,4 +14,16 @@ Pemeriksaan laporan visual dan penamaan foto (29 Oktober 2026):
 - Pemetaan nama asli dan hash tersedia dalam data/Identitas_Foto.csv; arsip historis dipertahankan.
 - Menjalankan ulang mulai.py berhasil sampai selesai; koordinat ukur, geometri, dan mask identik.
 - Selisih maksimum empat metrik error enam tahap: 0.000003134 px; selisih maksimum elemen K: 0.000023265 px.
-- Laporan visual lima halaman dirender dan diperiksa; tidak ada program Python tambahan.
+- Laporan visual enam halaman; foto utuh dan area papan ditampilkan berdampingan pada halaman pertama. Hasil PDF dirender dan diperiksa; tidak ada program Python tambahan.
+
+Pemeriksaan bagian awal dan daftar otomatis:
+- Sampul, daftar isi (i), daftar gambar (ii), serta enam halaman isi (1-6).
+- Gambar 1-6 diberi judul di bawah gambar dan masuk daftar secara otomatis.
+- Seluruh nomor daftar cocok dengan halaman caption; 13 tautan daftar menuju halaman yang benar.
+- Penanda halaman PDF memakai Sampul, i-ii, dan 1-6; hasil akhir dirender dan diperiksa.
+- Narasi disunting menjadi paragraf utuh 4-6 kalimat; seluruh halaman isi dirender dan diperiksa kembali.
+
+Pemeriksaan versi Word:
+- Laporan.docx memuat teks yang dapat disunting, enam gambar, field daftar isi/daftar gambar dan nomor halaman.
+- Hasil render sembilan halaman diperiksa seluruhnya; sampul tanpa garis dekoratif dan penomoran i-ii serta 1-6 sesuai.
+- Dokumen dibuat dari hasil perhitungan terakhir; program perhitungan tetap memperbarui audit dan PDF.

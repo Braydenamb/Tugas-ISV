@@ -1,6 +1,6 @@
 # Kalibrasi Kamera - Ringkasan
 
-Laporan PDF memuat lima halaman visual: alur, lokalisasi, galat, hasil, dan pemilihan metode.
+Laporan PDF dimulai dengan sampul, daftar isi, dan daftar gambar; dilanjutkan enam halaman isi dengan Gambar 1-6, paragraf naratif, dan nomor halaman otomatis.
 
 | Tahap | Modifikasi | Mean px | RMS px | Mean CV |
 |---|---|---:|---:|---:|

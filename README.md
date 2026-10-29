@@ -1,10 +1,15 @@
 # Tugas Mandiri ISV - Kalibrasi Kamera
 
-**Untuk membaca hasil, langsung buka [laporan/Laporan.pdf](laporan/Laporan.pdf).**
+**Untuk membaca atau menyunting laporan, buka [laporan/Laporan.docx](laporan/Laporan.docx).**
 Tidak perlu memasang atau menjalankan apa pun jika hanya ingin membaca.
-Laporan berisi lima halaman bergambar: alur pengukuran, lokalisasi sudut,
-galat reproyeksi, hasil kalibrasi, dan perbandingan modifikasi.
-Setiap halaman memakai keterangan singkat. Gambar tersedia pula di
+Daftar isi dan daftar gambar di Word dapat diperbarui dengan `Ctrl+A`, lalu `F9`.
+Versi Word disiapkan dari hasil perhitungan terakhir dan dapat diedit langsung.
+Laporan diawali sampul, daftar isi, dan daftar gambar. Enam halaman isi memuat
+pendahuluan dan foto utuh, alur pengukuran, lokalisasi sudut, galat reproyeksi,
+hasil kalibrasi, dan perbandingan modifikasi. Gambar 1-6 diberi judul;
+nomor halaman pada kedua daftar dibuat otomatis.
+Penjelasan ditulis dalam paragraf naratif singkat dengan bahasa baku dan lugas.
+Gambar tersedia pula di
 `audit/06_hasil_akhir/Visual_*.png`.
 
 ## Menghitung ulang
@@ -39,7 +44,7 @@ Semua foto, hasil audit, dan laporan **ikut Git**. Hanya lingkungan Python,
 cache, cadangan teknis dan berkas lokal yang diabaikan. Audit lama tidak dihapus:
 ada di `audit/Riwayat_Audit.zip`; arsip itu tidak perlu diekstrak untuk menjalankan tugas.
 
-Menjalankan ulang memperbarui enam tahap audit dan laporan dengan alur yang sama.
+Menjalankan ulang memperbarui enam tahap audit dan laporan PDF dengan alur yang sama.
 Program ini disiapkan untuk dataset tugas tersebut, bukan aplikasi umum.
 Hasil terakhir sekitar mean 0,739 px dan RMS 0,996 px; masih belum memenuhi
 acuan <0,5 px pada materi. Seluruh pengerjaan memakai foto yang sudah tersedia.

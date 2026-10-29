@@ -396,6 +396,12 @@ def buat_visualisasi(pengaturan):
         path = folder / nama
         fig.savefig(path, dpi=180, facecolor="white");plt.close(fig)
         return path
+    fig, axes = plt.subplots(1, 2, figsize=(8.4, 6.4))
+    axes[0].imshow(rgb)
+    axes[0].set_title(f"A. Foto utuh ({rgb.shape[1]} x {rgb.shape[0]} px)", fontsize=11)
+    axes[0].axis("off")
+    foto(axes[1], "B. Area papan diperbesar")
+    seleksi = simpan(fig, "Visual_Seleksi_Area.png")
     fig, axes = plt.subplots(2, 2, figsize=(8.4, 8.1))
     foto(axes[0,0], "A. Foto asli (dipotong untuk tampilan)")
     foto(axes[0,1], "B. Perkiraan batas + 49 sudut dalam")
@@ -467,13 +473,14 @@ def buat_visualisasi(pengaturan):
         ax.set_xlabel("Posisi pencarian lokal", fontsize=9);ax.tick_params(labelsize=8)
         fig.colorbar(heat, ax=ax, fraction=.046, pad=.04)
     lokalisasi = simpan(fig, "Visual_Lokalisasi.png")
-    return nama, alur, detail, lokalisasi
+    return nama, seleksi, alur, detail, lokalisasi
 
 
 def buat_laporan(pengaturan, tahap):
     """Laporan visual: satu halaman per bagian dengan keterangan singkat."""
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Image, Spacer, PageBreak
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Image, Spacer, PageBreak, Flowable
     from reportlab.lib.styles import ParagraphStyle
+    from reportlab.platypus.tableofcontents import TableOfContents
     from reportlab.lib.pagesizes import A4
     from reportlab.lib import colors
     from reportlab.pdfbase import pdfmetrics
@@ -490,7 +497,7 @@ def buat_laporan(pengaturan, tahap):
     folder = ROOT / "laporan";folder.mkdir(exist_ok=True)
     audit = ROOT / "audit/06_hasil_akhir"
     akhir = tahap[-1]
-    contoh, alur, detail, lokalisasi = buat_visualisasi(pengaturan)
+    contoh, seleksi, alur, detail, lokalisasi = buat_visualisasi(pengaturan)
     with zipfile.ZipFile(ROOT / "audit/Riwayat_Audit.zip") as z:
         studi = json.loads(z.read("pengujian_metode_lengkap/refinement_summary.json"))
     labels = ["k1","k2","p1","p2","k3","s1","s2","s3","s4"]
@@ -565,43 +572,116 @@ def buat_laporan(pengaturan, tahap):
     _write_csv(ROOT/"audit/Urutan_Hasil.csv",ringkasan)
     (ROOT/"audit/Urutan_Hasil.json").write_text(json.dumps(tahap,indent=2),encoding="utf-8")
     cerita=[]
+    judul_bagian = ParagraphStyle("JudulBagian",parent=judul,keepWithNext=True)
+    keterangan = ParagraphStyle("JudulGambar",parent=isi,fontSize=9,leading=12,alignment=1,spaceBefore=6,spaceAfter=10,keepWithNext=True)
+    daftar_style = ParagraphStyle("Daftar",parent=isi,fontSize=10,leading=17,leftIndent=18,firstLineIndent=-18,rightIndent=30,spaceBefore=7)
+    sampul = ParagraphStyle("Sampul",parent=judul,fontSize=21,leading=29,alignment=1,textColor=colors.HexColor("#153e55"))
+    tengah = ParagraphStyle("Tengah",parent=isi,alignment=1,leading=17)
     def p(teks,style=isi):cerita.append(Paragraph(escape(teks),style))
+    # Bagian awal tidak memuat identitas penulis/institusi yang belum diberikan.
+    cerita.append(Spacer(1,125))
+    p("LAPORAN PRAKTIKUM MANDIRI",tengah)
+    cerita.append(Spacer(1,16))
+    p("KALIBRASI KAMERA",sampul)
+    p("Instrumentasi Sistem Visual",tengah)
+    cerita.append(Spacer(1,40))
+    p("Dokumentasi visual pengolahan citra, pengembangan metode, dan evaluasi galat reproyeksi",tengah)
+    cerita.append(Spacer(1,55))
+    p("29 foto papan catur | 7 x 7 sudut dalam",tengah)
+    p("Ukuran sisi kotak: 44 mm",tengah)
+    p("Materi acuan: Pertemuan 10",tengah)
+    cerita.append(PageBreak())
+    p("DAFTAR ISI",judul)
+    class DaftarRapi(TableOfContents):
+        # Entri tetap dikumpulkan otomatis; kolom halaman dan titik penghubung
+        # digambar langsung agar seragam pada kedua daftar.
+        def wrap(self,availWidth,availHeight):
+            self._listing=self._lastEntries or [(0,"Menyusun daftar",0,None)]
+            self.width=availWidth;self.height=32*len(self._listing)
+            return self.width,self.height
+        def drawOn(self,canvas,x,y,_sW=0):
+            Flowable.drawOn(self,canvas,x,y,_sW)
+        def draw(self):
+            c=self.canv;c.setFont("Isi",10)
+            for i,(_,teks,page,key) in enumerate(self._listing):
+                y=self.height-16-32*i
+                nomor=str(self.formatter(page) if self.formatter else page)
+                c.setFillColor(colors.HexColor("#17252f"));c.drawString(0,y,teks)
+                c.drawRightString(self.width,y,nomor)
+                kiri=pdfmetrics.stringWidth(teks,"Isi",10)+8
+                kanan=self.width-pdfmetrics.stringWidth(nomor,"Isi",10)-8
+                dot=" . ";dw=pdfmetrics.stringWidth(dot,"Isi",10)
+                c.setFillColor(colors.HexColor("#647580"))
+                c.drawString(kiri,y,dot*max(0,int((kanan-kiri)/dw)))
+                if key:c.linkRect("",key,(0,y-3,self.width,y+12),relative=1)
+    daftar_isi=DaftarRapi(formatter=lambda n: "ii" if n==3 else str(n-3));daftar_isi.levelStyles=[daftar_style]
+    daftar_isi.dotsMinLevel=0
+    cerita.append(daftar_isi)
+    cerita.append(PageBreak())
+    heading=Paragraph("DAFTAR GAMBAR",judul)
+    heading._entry=("TOCEntry","Daftar Gambar","daftar-gambar")
+    cerita.append(heading)
+    daftar_gambar=DaftarRapi(formatter=lambda n: str(n-3));daftar_gambar._notifyKind="FigureEntry"
+    daftar_gambar.levelStyles=[daftar_style];daftar_gambar.dotsMinLevel=0
+    cerita.append(daftar_gambar)
+    gambar_ke=0
+    captions=["Foto utuh dan pembesaran area papan catur",
+              "Alur pengukuran sudut dan pemisahan dua panel",
+              "Respons sudut dan korelasi pola pada dua resolusi",
+              "Perataan citra dan visualisasi galat reproyeksi",
+              "Perkembangan error, matriks intrinsik, dan distorsi",
+              "Perbandingan modifikasi dan pemilihan model kalibrasi"]
     def halaman(judul_halaman,gambar,tinggi,teks):
-        if cerita:cerita.append(PageBreak())
-        p(judul_halaman,judul)
+        nonlocal gambar_ke
+        cerita.append(PageBreak())
+        heading=Paragraph(escape(judul_halaman),judul_bagian)
+        heading._entry=("TOCEntry",judul_halaman,f"bagian-{gambar_ke+1}")
+        cerita.append(heading)
+        if gambar_ke==0:
+            p("Kalibrasi kamera dilakukan untuk menentukan hubungan antara posisi titik pada papan dan posisi piksel pada foto. Hubungan tersebut diperlukan agar citra dapat digunakan sebagai dasar pengukuran geometrik. Pada praktikum ini, matriks intrinsik K dan koefisien distorsi ditentukan melalui pengolahan foto papan catur. Kesesuaian model kemudian dinilai menggunakan galat reproyeksi, yaitu jarak antara titik hasil pengukuran dan proyeksi model.")
         cerita.append(Image(str(gambar),width=510,height=tinggi))
-        cerita.append(Spacer(1,10))
+        gambar_ke+=1
+        caption=f"Gambar {gambar_ke}. {captions[gambar_ke-1]}"
+        cp=Paragraph(escape(caption),keterangan)
+        cp._entry=("FigureEntry",caption,f"gambar-{gambar_ke}")
+        cerita.append(cp)
         for baris in teks:p(baris)
-    halaman("1. Kalibrasi Kamera - Alur Pengukuran",alur,492,[
-        f"Instrumentasi Sistem Visual | 29 foto | 7 x 7 sudut dalam | Sisi kotak 44 mm. Contoh tetap: {contoh}.",
-        "A-B: foto dibaca dan sudut dilokalisasi. Garis kuning adalah perkiraan batas dari kisi sudut, bukan pengukuran tepi langsung.",
-        "C: dua panel berbagi parameter kamera; titik sambungan (oranye) dikecualikan. D: titik ukur hijau dibandingkan dengan proyeksi merah. Semua 29 foto tetap digunakan."])
-    halaman("2. Lokalisasi Sudut - Dari Intensitas ke Titik",lokalisasi,461,[
-        "A-B: citra keabuan menghasilkan respons sudut lokal; posisi disempurnakan pada ketelitian subpiksel.",
-        "C-D: persilangan dicari melalui korelasi pola empat kuadran. Tanda putih menunjukkan puncak respons; warna menyatakan nilai absolut korelasi ternormalisasi (0-1).",
-        "Kerapatan perataan dinaikkan dari 100 menjadi 200 piksel/kotak. Ini mengubah sampling pencarian, bukan resolusi sensor. Koordinat hasil ukur dikembalikan ke piksel foto asli."])
-    halaman("3. Perataan dan Evaluasi Galat Reproyeksi",detail,413,[
-        "Atas: citra diratakan sementara untuk pencarian sudut. Bentuk rata bukan bukti bahwa papan benar-benar sebidang.",
-        "Kiri bawah: jarak titik ukur hijau ke proyeksi merah adalah error satu sudut. Sudut contoh dipilih dekat median error foto tersebut.",
-        "Kanan bawah: panah selisih diperpanjang 30 kali agar terlihat; angka error tetap memakai jarak asli. Gambar menunjukkan residual kalibrasi, bukan validasi independen."])
-    halaman("4. Hasil Kalibrasi Bertahap",hasil,449,[
-        "T1 lokalisasi/audit → T2 eksklusi sambungan → T3 dua panel → T4 korelasi → T5 resolusi 200 → T6 thin-prism.",
-        "T1 memakai 1.418 pengamatan; T2-T6 memakai 1.216 identitas pengamatan yang sama. Mean = rata-rata jarak; RMS = akar rata-rata kuadrat jarak.",
-        "Validasi silang membagi foto menjadi lima kelompok. Pose foto uji dihitung dari titik jangkar; error dihitung pada titik lain (579 pengamatan evaluasi). Pemilihan metode tetap memakai validasi internal.",
-        "Mean akhir 0,739 px belum memenuhi acuan <0,50 px pada materi. Dua panel adalah asumsi model; bentuk fisik papan dan akurasi panjang belum diukur secara independen."])
-    halaman("5. Perbandingan Modifikasi dan Pemilihan Model",alternatif,474,[
-        "A: dua panel memberi penurunan terbesar pada perbandingan ini, tetapi menambah enam parameter pose per foto. B: perataan global 200 dipertahankan; perataan per panel tidak mengunggulinya.",
-        "C: thin-prism 9 dipilih. Model bertanda * ditolak: validasi memburuk dan terdapat pole penyebut radial sekitar 0,465 pada cakupan sensor perkiraan. Semua model di C memakai korelasi 100.",
-        "D: tambahan Gaussian-CLAHE tidak memperbaiki error historis. Hasil akhir menggabungkan korelasi global 200 dengan thin-prism 9. Eksperimen lain tetap tersedia dalam arsip audit."])
+    halaman("1. Pendahuluan dan Data Pengamatan",seleksi,365,[
+        f"Data yang digunakan terdiri atas 29 foto beresolusi 3120 x 4160 piksel dengan ukuran sisi kotak 44 mm. Pada setiap foto disediakan 49 sudut dalam dari susunan 7 x 7 titik. Foto {contoh} ditampilkan secara utuh dan diperbesar pada Gambar 1 agar bagian papan yang diamati dapat dikenali. Pemotongan hanya diterapkan untuk memperjelas tampilan dalam laporan. Pengukuran tetap dilakukan dalam koordinat dan resolusi foto asli."])
+    halaman("2. Tahapan Pengukuran dan Pemodelan Papan",alur,492,[
+        "Pada Gambar 2, posisi 49 sudut dalam ditentukan dari pertemuan kotak terang dan gelap. Batas berwarna kuning diperkirakan dari susunan sudut tersebut sehingga tidak digunakan sebagai hasil pengukuran tepi secara langsung. Setelah pemeriksaan citra, tiga sudut yang tidak dapat ditentukan dengan yakin akibat pantulan atau celah dikecualikan sehingga tersisa 1.418 pengamatan. Seluruh titik pada garis sambungan kemudian diabaikan dengan aturan yang sama pada setiap foto, sehingga 1.216 pengamatan dari seluruh 29 foto tetap digunakan. Kedua sisi papan dimodelkan sebagai dua panel dengan posisi dan orientasi masing-masing, tetapi matriks intrinsik serta koefisien distorsinya ditetapkan bersama. Titik ukur berwarna hijau selanjutnya dibandingkan dengan proyeksi model yang ditandai silang merah."])
+    halaman("3. Pengolahan Citra dan Penentuan Sudut",lokalisasi,461,[
+        "Pengukuran sudut diawali dengan mengubah foto menjadi citra keabuan sebagaimana ditampilkan pada Gambar 3. Respons sudut lokal digunakan untuk mencari persilangan, kemudian koordinatnya disempurnakan dengan cornerSubPix agar dapat dinyatakan sebagai pecahan piksel. Pada tahap berikutnya, posisi sudut ditentukan melalui korelasi ternormalisasi terhadap pola empat kuadran terang dan gelap; tanda putih menunjukkan puncak respons yang diperoleh. Kerapatan perataan dinaikkan dari 100 menjadi 200 piksel per kotak untuk menguji pengaruh sampling terhadap hasil pencarian. Peningkatan ini tidak menambah resolusi sensor karena seluruh informasi tetap berasal dari foto yang sama. Koordinat hasil pencarian kemudian dikembalikan ke piksel foto asli sebelum digunakan dalam kalibrasi."])
+    halaman("4. Evaluasi Galat Reproyeksi",detail,413,[
+        "Pada Gambar 4, citra diratakan sementara untuk membantu pencarian sudut, tanpa mengubah asumsi tentang bentuk fisik papan. Galat reproyeksi dihitung sebagai jarak antara titik ukur pada foto dan titik yang diproyeksikan oleh model kamera. Pembesaran satu sudut diperlihatkan untuk menunjukkan jarak lingkaran hijau terhadap silang merah dalam piksel asli. Sudut contoh dipilih berdasarkan galat yang paling dekat dengan median pada foto tersebut. Panah pada gambar diperpanjang 30 kali agar arah selisih dapat dilihat, sedangkan angka galat tetap dihitung dari jarak sebenarnya. Karena parameter model diperoleh dari data yang juga ditampilkan, gambar ini menunjukkan residual kalibrasi dan belum menjadi pengujian terhadap data independen."])
+    halaman("5. Hasil Kalibrasi Bertahap",hasil,449,[
+        f"Perubahan galat pada enam tahap, matriks intrinsik, dan koefisien distorsi ditampilkan pada Gambar 5. Tahap pertama menggunakan 1.418 pengamatan, sedangkan tahap kedua hingga keenam menggunakan 1.216 identitas titik yang sama setelah garis sambungan dikecualikan. Pada model akhir diperoleh mean galat {akhir['training_mean_px']:.6f} piksel dan RMS {akhir['training_rms_px']:.6f} piksel; mean merupakan rata-rata jarak, sedangkan RMS merupakan akar rata-rata kuadrat jarak. Validasi silang dilakukan dengan membagi foto menjadi lima kelompok, kemudian posisi dan orientasi pada foto uji ditentukan dari titik jangkar yang terpisah dari 579 titik evaluasi. Mean validasi silang yang diperoleh sebesar {akhir['validation_mean_px']:.6f} piksel, tetapi pemilihan metode masih menggunakan dataset yang sama secara berulang. Hasil ini belum memenuhi acuan galat di bawah 0,50 piksel pada materi dan belum membuktikan akurasi pengukuran panjang secara independen."])
+    halaman("6. Pembahasan Perubahan Metode",alternatif,458,[
+        "Berdasarkan perbandingan pada Gambar 6, penggunaan dua panel memberikan penurunan galat terbesar dalam rangkaian pengujian ini, dengan konsekuensi bertambahnya enam parameter posisi dan orientasi per foto. Perataan global pada 200 piksel per kotak dipertahankan karena hasil validasinya lebih baik daripada perataan per panel yang diuji. Pada korelasi 100 piksel per kotak, thin-prism dengan sembilan koefisien aktif dipilih dibandingkan kombinasi rational dan thin-prism yang menghasilkan validasi lebih buruk serta pemetaan distorsi yang tidak stabil pada sebagian domain sensor perkiraan. Penambahan Gaussian dan CLAHE pada pengujian historis juga tidak memberikan perbaikan sehingga tidak diterapkan sebagai pengolahan tambahan pada alur akhir. Model akhir disusun dengan menggabungkan pengukuran korelasi global 200 piksel per kotak dan distorsi thin-prism. Meskipun residual berkurang, hasil tersebut belum membuktikan besar ketidaksebidangan papan atau penyebab fisik distorsi lensa karena keduanya tidak diukur secara terpisah."])
     p("Acuan: materi/Pertemuan_10.pdf, hlm. 45-54 dan 57-60. Data hasil: audit/Urutan_Hasil.json dan Riwayat_Audit.zip. Pergantian detector dapat mengubah koordinat ukur; validasi berulang belum menggantikan pengujian independen.",kecil)
     cerita.append(Paragraph('Dasar metode: Zhang (2000), <link href="https://doi.org/10.1109/34.888718" color="#155e75">DOI 10.1109/34.888718</link>; <link href="https://docs.opencv.org/4.13.0/d9/d0c/group__calib3d.html" color="#155e75">dokumentasi model OpenCV</link>.',kecil))
     def footer(c,doc):
+        if doc.page==1:
+            c.addPageLabel(0,prefix="Sampul")
+            return
+        if doc.page==2:c.addPageLabel(1,style="ROMAN_LOWER",start=1)
+        if doc.page==4:c.addPageLabel(3,style="ARABIC",start=1)
         c.setFont("Isi",7);c.setFillColor(colors.HexColor("#526572"))
         c.drawString(40,23,"Instrumentasi Sistem Visual | Kalibrasi kamera | 29 foto")
-        c.drawRightString(A4[0]-40,23,str(doc.page))
-    SimpleDocTemplate(str(folder/"Laporan.pdf"),pagesize=A4,leftMargin=40,rightMargin=40,topMargin=35,
-                      bottomMargin=43,title="Kalibrasi Kamera - Laporan Visual").build(cerita,onFirstPage=footer,onLaterPages=footer)
-    md=["# Kalibrasi Kamera - Ringkasan", "", "Laporan PDF memuat lima halaman visual: alur, lokalisasi, galat, hasil, dan pemilihan metode.", "",
+        nomor={2:"i",3:"ii"}.get(doc.page,str(doc.page-3))
+        c.drawRightString(A4[0]-40,23,nomor)
+    class LaporanVisual(SimpleDocTemplate):
+        def afterFlowable(self,flowable):
+            if not hasattr(flowable,"_entry"):return
+            kind,teks,key=flowable._entry
+            nomor=self.page
+            self.canv.bookmarkPage(key)
+            if kind=="TOCEntry":self.canv.addOutlineEntry(teks,key,0,False)
+            self.notify(kind,(0,escape(teks),nomor,key))
+    LaporanVisual(str(folder/"Laporan.pdf"),pagesize=A4,leftMargin=40,rightMargin=40,topMargin=35,
+                  bottomMargin=43,title="Kalibrasi Kamera - Laporan Visual").multiBuild(
+                  cerita,onFirstPage=footer,onLaterPages=footer)
+    md=["# Kalibrasi Kamera - Ringkasan", "", "Laporan PDF dimulai dengan sampul, daftar isi, dan daftar gambar; dilanjutkan enam halaman isi dengan Gambar 1-6, paragraf naratif, dan nomor halaman otomatis.", "",
         "| Tahap | Modifikasi | Mean px | RMS px | Mean CV |", "|---|---|---:|---:|---:|"]
     md += [f"| T{i} | {r['nama']} | {r['training_mean_px']:.4f} | {r['training_rms_px']:.4f} | {r['validation_mean_px']:.4f} |" for i,r in enumerate(tahap,1)]
     md += ["", "Mean akhir belum memenuhi acuan <0,50 px. Validasi masih internal.", "", "29 foto dinamai Kalibrasi_01.jpg sampai Kalibrasi_29.jpg. Pemetaan nama asli dan hash: data/Identitas_Foto.csv.",
