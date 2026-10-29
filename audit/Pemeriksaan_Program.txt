@@ -7,3 +7,11 @@ Pemeriksaan versi sederhana:
 - Semua proyeksi validasi dihitung ulang; tidak ada tumpang tindih training/test atau jangkar/evaluasi.
 - Tahap 2-6 memakai identitas 1.216 pengamatan dan 579 titik evaluasi yang sama.
 - Salinan bersih tanpa kode/lingkungan lama berhasil dengan satu perintah python mulai.py; hasil 6 tahap cocok dengan toleransi 0,00001 px.
+
+Pemeriksaan laporan visual dan penamaan foto (29 Oktober 2026):
+- 29 foto dinamai Kalibrasi_01.jpg sampai Kalibrasi_29.jpg; seluruh hash tetap cocok.
+- Nama dan referensi data/NPZ/CSV/JSON serta penanda audit aktif diperbarui.
+- Pemetaan nama asli dan hash tersedia dalam data/Identitas_Foto.csv; arsip historis dipertahankan.
+- Menjalankan ulang mulai.py berhasil sampai selesai; koordinat ukur, geometri, dan mask identik.
+- Selisih maksimum empat metrik error enam tahap: 0.000003134 px; selisih maksimum elemen K: 0.000023265 px.
+- Laporan visual lima halaman dirender dan diperiksa; tidak ada program Python tambahan.

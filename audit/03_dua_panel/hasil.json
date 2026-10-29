@@ -7,20 +7,20 @@
   "pose_count": 58,
   "training_points": 1216,
   "training_mean_px": 0.9023771751350356,
-  "training_rms_px": 1.2762213116158294,
+  "training_rms_px": 1.2762213116158285,
   "validation_points": 579,
-  "validation_mean_px": 0.9679581891417195,
-  "validation_rms_px": 1.4317443029476677,
+  "validation_mean_px": 0.96795700232471,
+  "validation_rms_px": 1.4317422062128677,
   "K": [
     [
-      3122.60222461177,
+      3122.602230223154,
       0.0,
-      1595.0900692037558
+      1595.0900692249024
     ],
     [
       0.0,
-      3117.525163895175,
-      2119.388063339583
+      3117.5251689924653,
+      2119.3880547528493
     ],
     [
       0.0,
@@ -29,17 +29,17 @@
     ]
   ],
   "distortion": [
-    0.31768626409861855,
-    -2.008344933382937,
-    0.006343017462421034,
-    0.00150056778889519,
-    3.740967451300748
+    0.31768626539644407,
+    -2.0083448986577275,
+    0.006343017011943665,
+    0.0015005677473139078,
+    3.7409671903093145
   ],
   "distortion_health": {
     "positive_radial_denominator_poles": [],
-    "approximate_sensor_corner_radius": 0.8503570384892318,
+    "approximate_sensor_corner_radius": 0.8503570348512253,
     "pole_within_approximate_sensor_extent": false,
-    "minimum_sampled_jacobian_determinant": 0.9884605793491497,
+    "minimum_sampled_jacobian_determinant": 0.9884605731342865,
     "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
     "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
   },

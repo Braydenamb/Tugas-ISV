@@ -368,7 +368,7 @@ def buat_visualisasi(pengaturan):
         files, awal = z["files"].copy(), z["image_points"].copy()
     with np.load(folder / "parameter.npz", allow_pickle=False) as z:
         akhir = {k: z[k].copy() for k in z.files}
-    nama = "IMG-20261026-WA0103.jpg"  # Contoh tetap, bukan dipilih berdasarkan error.
+    nama = "Kalibrasi_27.jpg"  # Contoh tetap, bukan dipilih berdasarkan error.
     i = list(files).index(nama)
     rgb = cv.cvtColor(cv.imread(str(ROOT / "foto" / nama)), cv.COLOR_BGR2RGB)
     pts = awal[i].reshape(-1, 2)
@@ -439,12 +439,40 @@ def buat_visualisasi(pengaturan):
         "arrows_scale": 30, "boundary": "homography extrapolation from internal grid; not measured outer edge",
         "residuals": "training residuals; not independent validation",
     }, indent=2), encoding="utf-8")
-    return nama, alur, detail
+    # Respons pencarian ditampilkan dari piksel dan parameter yang sama dengan proses ukur.
+    fig, axes = plt.subplots(2, 2, figsize=(8.4, 7.6))
+    axes[0,0].imshow(gray, cmap="gray", vmin=0, vmax=255)
+    axes[0,0].set_xlim(low[0], high[0]);axes[0,0].set_ylim(high[1], low[1])
+    axes[0,0].set_title("A. Citra keabuan: sumber pengukuran", fontsize=11);axes[0,0].axis("off")
+    W = np.float64([[100,0,200],[0,100,200],[0,0,1]])
+    warp = cv.warpPerspective(gray, W @ np.linalg.inv(H), (1000,1000))
+    response = cv.cornerMinEigenVal(cv.GaussianBlur(warp,(7,7),1.5),7,3)
+    axes[0,1].imshow(response, cmap="inferno")
+    axes[0,1].set_xlim(100,900);axes[0,1].set_ylim(900,100)
+    axes[0,1].set_title("B. Respons sudut: terang = lebih kuat", fontsize=11);axes[0,1].axis("off")
+    for ax, skala in zip(axes[1], [100,200]):
+        W = np.float64([[skala,0,2*skala],[0,skala,2*skala],[0,0,1]])
+        warp = cv.warpPerspective(gray, W @ np.linalg.inv(H), (10*skala,10*skala))
+        size, radius = 2*round(.16*skala), round(.24*skala)
+        half = radius+size//2
+        x,y = np.round((grid[j]+2)*skala).astype(int)
+        patch = warp[y-half:y+half,x-half:x+half].astype(np.float32)
+        u = np.arange(size)-(size-1)/2
+        xx,yy = np.meshgrid(u,u);template = np.sign(xx*yy).astype(np.float32)
+        score = np.abs(cv.matchTemplate(patch,template,cv.TM_CCOEFF_NORMED))
+        iy,ix = np.unravel_index(np.argmax(score),score.shape)
+        heat = ax.imshow(score, cmap="viridis", vmin=0, vmax=1)
+        ax.scatter(ix,iy,marker="+",s=140,c="white",linewidths=2)
+        ax.set_title(f"{'C' if skala==100 else 'D'}. Korelasi {skala} px/kotak; puncak {score[iy,ix]:.3f}", fontsize=10)
+        ax.set_xlabel("Posisi pencarian lokal", fontsize=9);ax.tick_params(labelsize=8)
+        fig.colorbar(heat, ax=ax, fraction=.046, pad=.04)
+    lokalisasi = simpan(fig, "Visual_Lokalisasi.png")
+    return nama, alur, detail, lokalisasi
 
 
 def buat_laporan(pengaturan, tahap):
-    """Hasil belajar berupa satu ringkasan dan satu PDF, tanpa pilihan laporan."""
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Image, Preformatted, Spacer, PageBreak
+    """Laporan visual: satu halaman per bagian dengan keterangan singkat."""
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Image, Spacer, PageBreak
     from reportlab.lib.styles import ParagraphStyle
     from reportlab.lib.pagesizes import A4
     from reportlab.lib import colors
@@ -452,103 +480,133 @@ def buat_laporan(pengaturan, tahap):
     from reportlab.pdfbase.ttfonts import TTFont
     from html import escape
     import matplotlib
+    import zipfile
     font = Path(matplotlib.get_data_path()) / "fonts/ttf"
-    pdfmetrics.registerFont(TTFont("Isi", str(font / "DejaVuSans.ttf")))
-    pdfmetrics.registerFont(TTFont("Judul", str(font / "DejaVuSans-Bold.ttf")))
-    isi = ParagraphStyle("Isi", fontName="Isi", fontSize=9, leading=13, spaceAfter=8)
-    kecil = ParagraphStyle("Kecil", parent=isi, fontSize=7.6, leading=10.5, spaceAfter=0)
-    judul = ParagraphStyle("Judul", fontName="Judul", fontSize=13, leading=18, spaceBefore=8, spaceAfter=10)
-    kode = ParagraphStyle("Kode", fontName="Courier", fontSize=9.5, leading=14, spaceAfter=8)
-    folder = ROOT / "laporan"
-    folder.mkdir(exist_ok=True)
+    for nama, berkas in [("Isi","DejaVuSans.ttf"),("Judul","DejaVuSans-Bold.ttf")]:
+        pdfmetrics.registerFont(TTFont(nama,str(font/berkas)))
+    isi = ParagraphStyle("Isi",fontName="Isi",fontSize=10,leading=14,spaceAfter=9)
+    judul = ParagraphStyle("Judul",fontName="Judul",fontSize=15,leading=20,spaceAfter=12)
+    kecil = ParagraphStyle("Kecil",parent=isi,fontSize=8,leading=11,spaceAfter=5)
+    folder = ROOT / "laporan";folder.mkdir(exist_ok=True)
+    audit = ROOT / "audit/06_hasil_akhir"
     akhir = tahap[-1]
-    contoh, visual_alur, visual_detail = buat_visualisasi(pengaturan)
-    fig, ax = plt.subplots(figsize=(9, 4))
-    x = np.arange(6)
-    ax.bar(x-.18, [r["training_mean_px"] for r in tahap], .36, label="Mean kalibrasi")
-    ax.bar(x+.18, [r["validation_mean_px"] for r in tahap], .36, label="Mean validasi silang")
-    ax.set_xticks(x, [f"Tahap {i}" for i in range(1, 7)])
-    ax.set(ylabel="Error (piksel)", title="Pengerjaan berurutan dari deteksi sampai hasil akhir")
-    ax.legend();fig.tight_layout()
-    grafik_tahap = ROOT / "audit/Urutan_Hasil.png"
-    fig.savefig(grafik_tahap, dpi=160);plt.close(fig)
-    label = ["k1", "k2", "p1", "p2", "k3", "s1", "s2", "s3", "s4"]
-    angka = [akhir["distortion"][j] for j in [0, 1, 2, 3, 4, 8, 9, 10, 11]]
-    fig, ax = plt.subplots(figsize=(8, 3))
-    bars = ax.bar(label, angka, color="#155e75")
-    ax.axhline(0, color="black", lw=.5);ax.bar_label(bars, fmt="%.4f", padding=3, fontsize=8)
-    ax.margins(y=.2);ax.set(title="Koefisien distorsi hasil akhir", ylabel="Koefisien")
-    fig.tight_layout();grafik_distorsi = ROOT / "audit/06_hasil_akhir/Distorsi.png"
-    fig.savefig(grafik_distorsi, dpi=160);plt.close(fig)
-    ringkasan = [{"tahap": i, "nama": r["nama"], "foto": r["photos"], "titik": r["training_points"],
-                  "mean_px": r["training_mean_px"], "rms_px": r["training_rms_px"],
-                  "mean_validasi_px": r["validation_mean_px"], "rms_validasi_px": r["validation_rms_px"],
-                  "titik_validasi": r["validation_points"]} for i, r in enumerate(tahap, 1)]
-    _write_csv(ROOT / "audit/Urutan_Hasil.csv", ringkasan)
-    (ROOT / "audit/Urutan_Hasil.json").write_text(json.dumps(tahap, indent=2), encoding="utf-8")
-    rows = [["Tahap", "Perubahan", "Titik", "Mean px", "RMS px", "Mean CV"]]
-    rows += [[str(i), r["nama"], str(r["training_points"]), f"{r['training_mean_px']:.4f}", f"{r['training_rms_px']:.4f}", f"{r['validation_mean_px']:.4f}"] for i, r in enumerate(tahap, 1)]
-    cerita = []
-    def p(teks, style=isi):cerita.append(Paragraph(escape(teks).replace("\n", "<br/>"), style))
-    def tabel(data, widths):
-        t = Table([[Paragraph(escape(str(v)), kecil) for v in row] for row in data], colWidths=widths, repeatRows=1)
-        t.setStyle(TableStyle([("BACKGROUND", (0,0), (-1,0), colors.HexColor("#e8f0f5")),
-                              ("VALIGN", (0,0), (-1,-1), "TOP"), ("TOPPADDING", (0,0), (-1,-1), 5),
-                              ("BOTTOMPADDING", (0,0), (-1,-1), 5),
-                              ("LINEBELOW", (0,0), (-1,-1), .25, colors.HexColor("#cad8df"))]))
-        cerita.extend([t, Spacer(1, 9)])
-    p("Tugas Mandiri ISV - Kalibrasi Kamera", judul)
-    p("Tujuan: memperoleh matriks intrinsik K, plot distorsi, dan mean reprojection error sesuai materi Pertemuan 10. Data: 29 foto, 3120 x 4160 piksel, papan 8 x 8 kotak (7 x 7 sudut dalam), sisi kotak 44 mm.")
-    p("1. Urutan pengerjaan", judul)
-    tabel(rows, [42,183,55,78,78,79])
-    cerita.append(Image(str(grafik_tahap), width=500, height=222))
-    p("Tahap 1 memakai 1.418 pengamatan setelah tiga sudut ambigu dikecualikan berdasarkan citra. Tahap 2 mengabaikan semua titik di celah tengah secara seragam, sehingga tersisa 1.216 titik. Tahap 2-6 memakai identitas titik dan 579 titik evaluasi yang sama; tahap 1 memiliki jumlah titik berbeda. CV berarti validasi silang.")
-    p("Pengukuran sudut tetap berasal dari gambar. Homografi hanya membantu pencarian; koordinat dikembalikan ke piksel foto asli. Tidak ada titik dipindahkan ke tebakan model atau dibuang berdasarkan besarnya error.")
-    cerita.append(PageBreak())
-    p("Visualisasi A - Dari foto ke hasil pengukuran", judul)
-    p(f"Foto contoh tetap: {contoh}. Urutan A-D memakai foto yang sama agar setiap perubahan dapat dibandingkan. Gambar dipotong hanya untuk memperjelas papan; perhitungan tetap memakai koordinat foto asli.")
-    cerita.append(Image(str(visual_alur), width=500, height=482))
-    p("Kuning: perkiraan batas papan melalui perpanjangan kisi sudut dalam, bukan deteksi tepi atau ukuran tepi yang diukur. Biru muda: sudut/panel A; merah muda: panel B; oranye: celah atau titik yang dikecualikan. Warna panel adalah kelompok model, bukan bukti pengukuran kelengkungan papan.")
-    p("Hijau adalah titik yang diukur dari foto; silang merah adalah hasil proyeksi model akhir. Pada skala seluruh papan keduanya hampir bertumpuk. Selisihnya diperjelas pada halaman berikutnya.")
-    cerita.append(PageBreak())
-    p("Visualisasi B - Perataan dan arti error", judul)
-    cerita.append(Image(str(visual_detail), width=500, height=405))
-    p("Atas: citra dipetakan sementara ke kisi yang tampak dari depan untuk mempermudah pencarian pola. Resolusi 100 dan 200 piksel per kotak berarti kerapatan sampel proses, bukan foto baru atau tambahan detail sensor. Koordinat hasil pencarian dikembalikan ke foto asli; citra rata ini tidak dipakai untuk menyatakan bahwa papan benar-benar datar.")
-    p("Kiri bawah: pembesaran satu sudut dengan error paling dekat median pada foto contoh. Jarak lingkaran hijau ke silang merah adalah error sudut tersebut dalam piksel asli. Nilainya berbeda dari mean seluruh titik dan seluruh foto.")
-    p("Kanan bawah: panah dari titik ukur menuju proyeksi diperpanjang 30 kali supaya arah selisih terbaca. Angka error tetap memakai jarak sebenarnya, tidak dikalikan 30. Gambar menunjukkan residual kalibrasi pada data yang dipakai melatih model; angka validasi silang dilaporkan terpisah.")
-    p("Seluruh gambar ini dibuat otomatis oleh mulai.py dan tersimpan di audit/06_hasil_akhir/Visual_Proses.png serta Visual_Detail.png. Penanda hanya menjelaskan hasil, tidak menggeser sudut atau menurunkan error.")
-    cerita.append(PageBreak())
-    p("2. Hasil akhir", judul)
-    p(f"Seluruh 29 foto dipakai. Mean error {akhir['training_mean_px']:.6f} piksel; RMS {akhir['training_rms_px']:.6f} piksel. Mean validasi silang {akhir['validation_mean_px']:.6f}; RMS validasi {akhir['validation_rms_px']:.6f} piksel.")
-    p("Matriks intrinsik K dalam piksel:")
-    cerita.append(Preformatted("\n".join("["+" ".join(f"{v:12.5f}" for v in row)+"]" for row in akhir["K"]), kode))
-    tabel([["Koefisien", "Nilai"]]+[[n,f"{v:.9f}"] for n,v in zip(label,angka)], [180,335])
-    cerita.append(Image(str(grafik_distorsi), width=490, height=184))
-    p("Model akhir menggunakan dua panel planar dengan K dan distorsi bersama. Setiap foto memiliki dua pose; 58 pose tetap berasal dari 29 foto. Model thin-prism menambah empat koefisien s1-s4; koefisien rational k4-k6 tetap nol. Pengembangan ini perlu dijelaskan sebagai penyesuaian atas contoh satu papan datar pada materi.")
-    cerita.append(PageBreak())
-    p("3. Penjelasan, audit, dan batas hasil", judul)
-    p("Tahap 1 memperbaiki posisi sudut pada foto. Tahap 2 memisahkan pengaruh celah papan. Tahap 3 memperlakukan kedua sisi sebagai bidang tersendiri. Tahap 4 mengukur sudut dari korelasi empat kuadran terang-gelap. Tahap 5 meningkatkan resolusi perataan dari 100 menjadi 200 piksel per kotak. Tahap 6 menambah suku thin-prism pada model distorsi.")
-    p("Validasi silang memakai lima bagian foto. Foto yang diuji tidak dipakai untuk mengestimasi K/distorsi. Pada foto tersebut, pose dihitung dari titik jangkar berselang-seling; error diukur pada titik lain. Pemilihan metode menggunakan data yang sama berkali-kali, sehingga ini masih validasi internal dan belum bukti akurasi pada pengukuran independen.")
-    p("Tiga sudut ambigu: WA0101 baris 7 kolom 4 (celah/pantulan), WA0089 baris 7 kolom 7 dan WA0094 baris 6 kolom 3 (pantulan/tekstur). Garis sambungan di tengah dikecualikan seluruhnya pada tahap 2-6, termasuk satu dari tiga titik tersebut. Mask titik dan alasan pengecualian tersimpan dalam data dan parameter audit.")
-    p("Menurut acuan materi hlm. 53, error <0,25 px sangat bagus dan <0,50 px dapat diterima. Hasil sekitar 0,739 px belum mencapai acuan <0,5 px. Kamera dan zoom dilaporkan sama, fokus otomatis dan pose bervariasi. Fokus otomatis mungkin memengaruhi intrinsik, tetapi kontribusinya pada error ini belum dibuktikan. Seluruh pengerjaan tetap memakai foto yang tersedia.")
-    p("4. Cara membaca berkas", judul)
-    p("Buka laporan/Laporan.pdf untuk hasil utama. Folder audit/01 sampai audit/06 mengikuti urutan pada tabel. Setiap tahap menyimpan angka, parameter, error tiap titik, dan rencana validasi. Foto bertanda ada pada tahap 1 dan 6. Riwayat audit serta percobaan sebelumnya tetap disertakan dalam audit/Riwayat_Audit.zip dan ikut Git; arsip itu tidak perlu dibuka untuk menjalankan tugas.")
-    p("Cukup jalankan: python mulai.py. Program menyiapkan kebutuhan dan menjalankan seluruh tahap dalam urutan tetap. Hasil yang sudah disertakan bisa dibaca tanpa menjalankan ulang. Percobaan lama yang tidak membantu/ditolak tetap tersedia dalam arsip audit; tidak ada pilihan cabang yang harus ditentukan pengguna.")
-    p("Referensi: Yakub Fahim Luckyarno, Optika Geometri Kamera & Kalibrasi Sensorik, Pertemuan 10, hlm. 45-54, 57-60 dan 65 (materi/Pertemuan_10.pdf). Contoh materi mencetak keluaran calibrateCamera sebagai mean, sedangkan nilai baliknya RMS. Program menghitung mean jarak secara terpisah melalui projectPoints dan melaporkan keduanya.")
-    def footer(c, doc):
-        c.setFont("Isi", 7);c.setFillColor(colors.HexColor("#526572"))
-        c.drawString(40, 23, "Tugas ISV | 29 foto | Kotak 44 mm")
-        c.drawRightString(A4[0]-40, 23, str(doc.page))
-    SimpleDocTemplate(str(folder / "Laporan.pdf"), pagesize=A4, leftMargin=40, rightMargin=40,
-                      topMargin=35, bottomMargin=43, title="Tugas Mandiri ISV - Kalibrasi Kamera").build(cerita, onFirstPage=footer, onLaterPages=footer)
-    md = ['# Hasil Tugas Mandiri ISV', '', 'Jalankan `python mulai.py`, lalu buka `laporan/Laporan.pdf`.', '',
-          '| Tahap | Perubahan | Titik | Mean px | RMS px | Mean CV |', '|---|---|---:|---:|---:|---:|']
-    md += ['| '+' | '.join(r)+' |' for r in rows[1:]]
-    md += ['', 'Tahap 2-6 memakai 1.216 titik yang sama. Mean dan RMS berbeda; hasil masih belum memenuhi acuan <0,5 px.', '',
-           'Visual tahapan dan pembesaran error ada di halaman 2-3 PDF serta `audit/06_hasil_akhir/Visual_Proses.png` dan `Visual_Detail.png`.', '',
-           'Semua audit ikut Git pada folder `audit/`. Riwayat lama ada dalam `audit/Riwayat_Audit.zip`.', '',
-           'Kamera dan zoom sama, fokus otomatis, pose bervariasi menurut keterangan pengguna. Kontribusi autofocus belum diukur.', '']
-    (folder / "Ringkasan.md").write_text('\n'.join(md), encoding='utf-8')
+    contoh, alur, detail, lokalisasi = buat_visualisasi(pengaturan)
+    with zipfile.ZipFile(ROOT / "audit/Riwayat_Audit.zip") as z:
+        studi = json.loads(z.read("pengujian_metode_lengkap/refinement_summary.json"))
+    labels = ["k1","k2","p1","p2","k3","s1","s2","s3","s4"]
+    D = [akhir["distortion"][i] for i in [0,1,2,3,4,8,9,10,11]]
+    def simpan(fig,nama):
+        fig.tight_layout(pad=1.8)
+        path = audit/nama;fig.savefig(path,dpi=180,facecolor="white");plt.close(fig)
+        return path
+    fig, axes = plt.subplots(2,2,figsize=(8.4,7.4))
+    x = np.arange(6);ax=axes[0,0]
+    ax.bar(x-.18,[r["training_mean_px"] for r in tahap],.36,label="Kalibrasi")
+    ax.bar(x+.18,[r["validation_mean_px"] for r in tahap],.36,label="Validasi silang")
+    ax.set_xticks(x,[f"T{i}" for i in range(1,7)]);ax.set_ylabel("Mean error (px)")
+    ax.set_title("A. Pengaruh enam tahap",fontsize=12);ax.legend(fontsize=8)
+    ax=axes[0,1];ax.axis("off");ax.set_title("B. Matriks intrinsik K (piksel)",fontsize=12)
+    matriks="\n".join("["+" ".join(f"{v:9.3f}" for v in row)+"]" for row in akhir["K"])
+    ax.text(.03,.65,matriks,fontsize=10.5,family="monospace",va="center",transform=ax.transAxes)
+    ax.text(.03,.27,"fx, fy: fokus dalam piksel\ncx, cy: koordinat titik utama",fontsize=10,transform=ax.transAxes)
+    ax=axes[1,0];bars=ax.bar(labels,D,color="#155e75")
+    ax.axhline(0,color="black",lw=.5);ax.bar_label(bars,fmt="%.3f",fontsize=7,padding=2)
+    ax.set_title("C. Sembilan koefisien distorsi aktif",fontsize=11)
+    ax.tick_params(axis="x",labelsize=8);ax.margins(y=.23)
+    ax=axes[1,1];ax.axis("off");ax.set_title("D. Evaluasi model akhir",fontsize=12)
+    metrik=[["Metrik","Piksel"],["Mean kalibrasi",f"{akhir['training_mean_px']:.6f}"],
+            ["RMS kalibrasi",f"{akhir['training_rms_px']:.6f}"],
+            ["Mean validasi silang",f"{akhir['validation_mean_px']:.6f}"],
+            ["RMS validasi silang",f"{akhir['validation_rms_px']:.6f}"]]
+    t=ax.table(cellText=metrik,colWidths=[.65,.35],cellLoc="left",loc="center")
+    t.auto_set_font_size(False);t.set_fontsize(10);t.scale(1,1.8)
+    for (row,col),cell in t.get_celld().items():
+        cell.set_edgecolor("#cad8df")
+        if row==0:cell.set_facecolor("#e8f0f5")
+    hasil = simpan(fig,"Visual_Hasil.png")
+    # Grafik audit lama tetap tersedia sebagai berkas mandiri.
+    fig,ax=plt.subplots(figsize=(9,4))
+    ax.bar(x-.18,[r["training_mean_px"] for r in tahap],.36,label="Mean kalibrasi")
+    ax.bar(x+.18,[r["validation_mean_px"] for r in tahap],.36,label="Mean validasi silang")
+    ax.set_xticks(x,[f"Tahap {i}" for i in range(1,7)]);ax.set_ylabel("Error (piksel)")
+    ax.legend();fig.tight_layout();fig.savefig(ROOT/"audit/Urutan_Hasil.png",dpi=160);plt.close(fig)
+    fig,ax=plt.subplots(figsize=(8,3));bars=ax.bar(labels,D,color="#155e75")
+    ax.axhline(0,color="black",lw=.5);ax.bar_label(bars,fmt="%.4f",fontsize=8,padding=3)
+    ax.margins(y=.2);ax.set_title("Koefisien distorsi hasil akhir")
+    fig.tight_layout();fig.savefig(audit/"Distorsi.png",dpi=160);plt.close(fig)
+    ref=studi["reference_methods"]["results"]
+    uji={r["experiment_id"]:r for r in studi["follow_up_results"]}
+    fig,axes=plt.subplots(2,2,figsize=(8.4,7.8))
+    def batang(ax,nama,nilai,warna,judul):
+        ax.barh(nama,nilai,color=warna,height=.6);ax.invert_yaxis()
+        ax.set_xlim(0,max(nilai)*1.26);ax.set_title(judul,fontsize=11)
+        ax.tick_params(axis="y",labelsize=8);ax.tick_params(axis="x",labelsize=8)
+        ax.set_xlabel("Mean validasi silang (px)",fontsize=9)
+        for i,v in enumerate(nilai):ax.text(v+max(nilai)*.02,i,f"{v:.4f}",va="center",fontsize=8)
+    batang(axes[0,0],["Sudut / 1 bidang","Sudut / 2 panel","Korelasi / 1 bidang","Korelasi / 2 panel"],
+           [r["validation_mean_px"] for r in ref],["#718096","#155e75","#718096","#155e75"],"A. Geometri dan pengukuran")
+    batang(axes[0,1],["Global 100","Per panel 100","Global 200","Per panel 200"],
+           [ref[-1]["validation_mean_px"]]+[uji[k]["validation_mean_px"] for k in ["panel100","global200","panel200"]],
+           ["#718096","#718096","#155e75","#718096"],"B. Resolusi perataan (px/kotak)")
+    batang(axes[1,0],["k3 = 0","Standar 5","Rational 8","Thin-prism 9","Rational + prism 12*"],
+           [uji["fixed_k3"]["validation_mean_px"],ref[-1]["validation_mean_px"]]+[uji[k]["validation_mean_px"] for k in ["rational8","thin_prism9","rational_prism12"]],
+           ["#718096","#718096","#718096","#155e75","#c2413b"],"C. Model distorsi pada resolusi 100")
+    ax=axes[1,1];h=pengaturan["history"]
+    yy=np.arange(2)
+    ax.bar(yy-.18,[h[3]["mean_px"],h[4]["mean_px"]],.36,label="Mean")
+    ax.bar(yy+.18,[h[3]["rms_px"],h[4]["rms_px"]],.36,label="RMS")
+    ax.set_xticks(yy,["Dasar","+ Gaussian/CLAHE"]);ax.tick_params(labelsize=8)
+    ax.set_ylabel("Error (px)");ax.set_title("D. Uji prapengolahan tambahan",fontsize=11);ax.legend(fontsize=8)
+    alternatif=simpan(fig,"Visual_Eksperimen.png")
+    ringkasan=[{"tahap":i,"nama":r["nama"],"foto":r["photos"],"titik":r["training_points"],
+                "mean_px":r["training_mean_px"],"rms_px":r["training_rms_px"],
+                "mean_validasi_px":r["validation_mean_px"],"rms_validasi_px":r["validation_rms_px"],
+                "titik_validasi":r["validation_points"]} for i,r in enumerate(tahap,1)]
+    _write_csv(ROOT/"audit/Urutan_Hasil.csv",ringkasan)
+    (ROOT/"audit/Urutan_Hasil.json").write_text(json.dumps(tahap,indent=2),encoding="utf-8")
+    cerita=[]
+    def p(teks,style=isi):cerita.append(Paragraph(escape(teks),style))
+    def halaman(judul_halaman,gambar,tinggi,teks):
+        if cerita:cerita.append(PageBreak())
+        p(judul_halaman,judul)
+        cerita.append(Image(str(gambar),width=510,height=tinggi))
+        cerita.append(Spacer(1,10))
+        for baris in teks:p(baris)
+    halaman("1. Kalibrasi Kamera - Alur Pengukuran",alur,492,[
+        f"Instrumentasi Sistem Visual | 29 foto | 7 x 7 sudut dalam | Sisi kotak 44 mm. Contoh tetap: {contoh}.",
+        "A-B: foto dibaca dan sudut dilokalisasi. Garis kuning adalah perkiraan batas dari kisi sudut, bukan pengukuran tepi langsung.",
+        "C: dua panel berbagi parameter kamera; titik sambungan (oranye) dikecualikan. D: titik ukur hijau dibandingkan dengan proyeksi merah. Semua 29 foto tetap digunakan."])
+    halaman("2. Lokalisasi Sudut - Dari Intensitas ke Titik",lokalisasi,461,[
+        "A-B: citra keabuan menghasilkan respons sudut lokal; posisi disempurnakan pada ketelitian subpiksel.",
+        "C-D: persilangan dicari melalui korelasi pola empat kuadran. Tanda putih menunjukkan puncak respons; warna menyatakan nilai absolut korelasi ternormalisasi (0-1).",
+        "Kerapatan perataan dinaikkan dari 100 menjadi 200 piksel/kotak. Ini mengubah sampling pencarian, bukan resolusi sensor. Koordinat hasil ukur dikembalikan ke piksel foto asli."])
+    halaman("3. Perataan dan Evaluasi Galat Reproyeksi",detail,413,[
+        "Atas: citra diratakan sementara untuk pencarian sudut. Bentuk rata bukan bukti bahwa papan benar-benar sebidang.",
+        "Kiri bawah: jarak titik ukur hijau ke proyeksi merah adalah error satu sudut. Sudut contoh dipilih dekat median error foto tersebut.",
+        "Kanan bawah: panah selisih diperpanjang 30 kali agar terlihat; angka error tetap memakai jarak asli. Gambar menunjukkan residual kalibrasi, bukan validasi independen."])
+    halaman("4. Hasil Kalibrasi Bertahap",hasil,449,[
+        "T1 lokalisasi/audit → T2 eksklusi sambungan → T3 dua panel → T4 korelasi → T5 resolusi 200 → T6 thin-prism.",
+        "T1 memakai 1.418 pengamatan; T2-T6 memakai 1.216 identitas pengamatan yang sama. Mean = rata-rata jarak; RMS = akar rata-rata kuadrat jarak.",
+        "Validasi silang membagi foto menjadi lima kelompok. Pose foto uji dihitung dari titik jangkar; error dihitung pada titik lain (579 pengamatan evaluasi). Pemilihan metode tetap memakai validasi internal.",
+        "Mean akhir 0,739 px belum memenuhi acuan <0,50 px pada materi. Dua panel adalah asumsi model; bentuk fisik papan dan akurasi panjang belum diukur secara independen."])
+    halaman("5. Perbandingan Modifikasi dan Pemilihan Model",alternatif,474,[
+        "A: dua panel memberi penurunan terbesar pada perbandingan ini, tetapi menambah enam parameter pose per foto. B: perataan global 200 dipertahankan; perataan per panel tidak mengunggulinya.",
+        "C: thin-prism 9 dipilih. Model bertanda * ditolak: validasi memburuk dan terdapat pole penyebut radial sekitar 0,465 pada cakupan sensor perkiraan. Semua model di C memakai korelasi 100.",
+        "D: tambahan Gaussian-CLAHE tidak memperbaiki error historis. Hasil akhir menggabungkan korelasi global 200 dengan thin-prism 9. Eksperimen lain tetap tersedia dalam arsip audit."])
+    p("Acuan: materi/Pertemuan_10.pdf, hlm. 45-54 dan 57-60. Data hasil: audit/Urutan_Hasil.json dan Riwayat_Audit.zip. Pergantian detector dapat mengubah koordinat ukur; validasi berulang belum menggantikan pengujian independen.",kecil)
+    cerita.append(Paragraph('Dasar metode: Zhang (2000), <link href="https://doi.org/10.1109/34.888718" color="#155e75">DOI 10.1109/34.888718</link>; <link href="https://docs.opencv.org/4.13.0/d9/d0c/group__calib3d.html" color="#155e75">dokumentasi model OpenCV</link>.',kecil))
+    def footer(c,doc):
+        c.setFont("Isi",7);c.setFillColor(colors.HexColor("#526572"))
+        c.drawString(40,23,"Instrumentasi Sistem Visual | Kalibrasi kamera | 29 foto")
+        c.drawRightString(A4[0]-40,23,str(doc.page))
+    SimpleDocTemplate(str(folder/"Laporan.pdf"),pagesize=A4,leftMargin=40,rightMargin=40,topMargin=35,
+                      bottomMargin=43,title="Kalibrasi Kamera - Laporan Visual").build(cerita,onFirstPage=footer,onLaterPages=footer)
+    md=["# Kalibrasi Kamera - Ringkasan", "", "Laporan PDF memuat lima halaman visual: alur, lokalisasi, galat, hasil, dan pemilihan metode.", "",
+        "| Tahap | Modifikasi | Mean px | RMS px | Mean CV |", "|---|---|---:|---:|---:|"]
+    md += [f"| T{i} | {r['nama']} | {r['training_mean_px']:.4f} | {r['training_rms_px']:.4f} | {r['validation_mean_px']:.4f} |" for i,r in enumerate(tahap,1)]
+    md += ["", "Mean akhir belum memenuhi acuan <0,50 px. Validasi masih internal.", "", "29 foto dinamai Kalibrasi_01.jpg sampai Kalibrasi_29.jpg. Pemetaan nama asli dan hash: data/Identitas_Foto.csv.",
+           "", "Jalankan python mulai.py. Foto, audit, pemetaan nama, dan laporan tidak di-ignore Git.", ""]
+    (folder/"Ringkasan.md").write_text("\n".join(md),encoding="utf-8")
 
 
 def kerjakan():

@@ -2,9 +2,10 @@
 
 **Untuk membaca hasil, langsung buka [laporan/Laporan.pdf](laporan/Laporan.pdf).**
 Tidak perlu memasang atau menjalankan apa pun jika hanya ingin membaca.
-Halaman 2-3 memperlihatkan batas papan kuning, sudut, dua panel,
-perataan gambar, dan pembesaran selisih pengukuran dengan proyeksi model.
-Gambar juga tersedia di `audit/06_hasil_akhir/Visual_Proses.png` dan `Visual_Detail.png`.
+Laporan berisi lima halaman bergambar: alur pengukuran, lokalisasi sudut,
+galat reproyeksi, hasil kalibrasi, dan perbandingan modifikasi.
+Setiap halaman memakai keterangan singkat. Gambar tersedia pula di
+`audit/06_hasil_akhir/Visual_*.png`.
 
 ## Menghitung ulang
 
@@ -23,11 +24,16 @@ pola -> resolusi lebih tinggi -> hasil akhir dan laporan.
 
 ## Isi folder
 
-- `foto/`: 29 foto asli yang dipakai.
+- `foto/`: 29 foto asli, berurutan `Kalibrasi_01.jpg` sampai `Kalibrasi_29.jpg`.
 - `data/`: ukuran kotak 44 mm, sudut awal dan catatan pengukuran; tidak perlu diedit.
 - `audit/`: bukti dan angka setiap tahap, termasuk riwayat audit lama dalam ZIP.
 - `laporan/`: laporan PDF dan ringkasan yang mudah dibaca.
 - `materi/`: PDF kuliah sebagai acuan.
+
+Foto diberi nomor menurut urutan nama asli, bukan kualitas foto.
+Tabel `data/Identitas_Foto.csv` memasangkan nama baru, nama asli, dan hash foto.
+Isi gambar tidak diubah. Nama dalam arsip audit lama dipertahankan sebagai riwayat;
+seluruh rujukan pada data dan audit aktif sudah memakai nama baru.
 
 Semua foto, hasil audit, dan laporan **ikut Git**. Hanya lingkungan Python,
 cache, cadangan teknis dan berkas lokal yang diabaikan. Audit lama tidak dihapus:
