@@ -1,0 +1,380 @@
+[
+  {
+    "point_index": 0,
+    "correlation": 0.9658243060112,
+    "subpixel_offset": [
+      -0.3548796758269384,
+      0.3934393138745484
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 1,
+    "correlation": 0.9733222126960754,
+    "subpixel_offset": [
+      0.08761190305463384,
+      0.13508013044928868
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 2,
+    "correlation": 0.9016281962394714,
+    "subpixel_offset": [
+      0.23406814279535762,
+      0.44902113968531415
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 3,
+    "correlation": 0.8889126181602478,
+    "subpixel_offset": [
+      0.144986086218218,
+      0.10551654813061401
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 4,
+    "correlation": 0.9347184300422668,
+    "subpixel_offset": [
+      0.23025651109936027,
+      -0.3087451854428208
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 5,
+    "correlation": 0.9595019221305847,
+    "subpixel_offset": [
+      -0.39006928961608706,
+      0.2618802571892989
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 6,
+    "correlation": 0.9601891040802002,
+    "subpixel_offset": [
+      0.3681256842387914,
+      -0.43957167667688996
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 7,
+    "correlation": 0.9672346115112305,
+    "subpixel_offset": [
+      -0.34363364540069163,
+      0.21380672544079116
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 8,
+    "correlation": 0.9621022939682007,
+    "subpixel_offset": [
+      -0.09865992410456818,
+      -0.35863486158272956
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 9,
+    "correlation": 0.9201496243476868,
+    "subpixel_offset": [
+      -0.3035892347915582,
+      0.42816686663887465
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 10,
+    "correlation": 0.9138625264167786,
+    "subpixel_offset": [
+      0.3391768928329427,
+      0.10984413862916835
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 11,
+    "correlation": 0.9399663805961609,
+    "subpixel_offset": [
+      -0.10057918977644914,
+      -0.49515556982509457
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 12,
+    "correlation": 0.9678674936294556,
+    "subpixel_offset": [
+      0.35945628255651235,
+      0.07025560226822886
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 13,
+    "correlation": 0.960524320602417,
+    "subpixel_offset": [
+      -0.29726305007188936,
+      0.4784522690715017
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 14,
+    "correlation": 0.9640747308731079,
+    "subpixel_offset": [
+      -0.26350144199495334,
+      0.37995369156375
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 15,
+    "correlation": 0.9731250405311584,
+    "subpixel_offset": [
+      -0.3306198565301519,
+      -0.20079115238272177
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 16,
+    "correlation": 0.9388729333877563,
+    "subpixel_offset": [
+      0.2187991168072177,
+      -0.4731732104645738
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 17,
+    "correlation": 0.9637488126754761,
+    "subpixel_offset": [
+      0.008621151486966624,
+      0.3857981113616755
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 18,
+    "correlation": 0.9594433307647705,
+    "subpixel_offset": [
+      0.31431129914798456,
+      0.2636910632461411
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 19,
+    "correlation": 0.9642371535301208,
+    "subpixel_offset": [
+      -0.02668342015304194,
+      0.05360195722051374
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 20,
+    "correlation": 0.9770310521125793,
+    "subpixel_offset": [
+      -0.025013072461227047,
+      0.1232699918893921
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 28,
+    "correlation": 0.9825972318649292,
+    "subpixel_offset": [
+      -0.08767421827819415,
+      -0.1675565173234314
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 29,
+    "correlation": 0.9720203280448914,
+    "subpixel_offset": [
+      0.44916745121955703,
+      -0.21965269376005922
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 30,
+    "correlation": 0.9767737984657288,
+    "subpixel_offset": [
+      0.05005865248729007,
+      -0.1755397452624706
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 31,
+    "correlation": 0.828863263130188,
+    "subpixel_offset": [
+      0.5000741661389568,
+      -0.11740232422867726
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 32,
+    "correlation": 0.8117794394493103,
+    "subpixel_offset": [
+      0.194320660174464,
+      0.22752948112035998
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 33,
+    "correlation": 0.9599034190177917,
+    "subpixel_offset": [
+      0.045646532735154635,
+      0.37223386124571034
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 34,
+    "correlation": 0.971264660358429,
+    "subpixel_offset": [
+      -0.024552574153944105,
+      0.3411995840294065
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 35,
+    "correlation": 0.9723490476608276,
+    "subpixel_offset": [
+      -0.18478689163122586,
+      -0.392607126701845
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 36,
+    "correlation": 0.969584047794342,
+    "subpixel_offset": [
+      0.4307990390063239,
+      0.145850336298837
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 37,
+    "correlation": 0.8455131649971008,
+    "subpixel_offset": [
+      0.3798017638433081,
+      0.23021552085703303
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 38,
+    "correlation": 0.7144051790237427,
+    "subpixel_offset": [
+      0.41794481676558515,
+      0.040753458048572035
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 39,
+    "correlation": 0.7026051878929138,
+    "subpixel_offset": [
+      -0.18932255243389454,
+      0.33689799172192436
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 40,
+    "correlation": 0.9518670439720154,
+    "subpixel_offset": [
+      0.24805382900283296,
+      -0.4692776947234351
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 41,
+    "correlation": 0.9631606340408325,
+    "subpixel_offset": [
+      0.30058051182120504,
+      0.24569450634854742
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 42,
+    "correlation": 0.9760750532150269,
+    "subpixel_offset": [
+      0.4409727919579413,
+      -0.1953547106053813
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 43,
+    "correlation": 0.9632625579833984,
+    "subpixel_offset": [
+      0.3632414426045578,
+      0.44232328258521003
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 44,
+    "correlation": 0.9433078765869141,
+    "subpixel_offset": [
+      0.3132336150457478,
+      -0.34474486113229513
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 45,
+    "correlation": 0.8855223655700684,
+    "subpixel_offset": [
+      -0.4926217314754132,
+      -0.3226798430117243
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 46,
+    "correlation": 0.9573171138763428,
+    "subpixel_offset": [
+      -0.0648604351972968,
+      -0.07198920850957748
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 47,
+    "correlation": 0.9593748450279236,
+    "subpixel_offset": [
+      -0.19001523230116457,
+      -0.0950869356038181
+    ],
+    "pixels_per_square": 100
+  },
+  {
+    "point_index": 48,
+    "correlation": 0.9743952751159668,
+    "subpixel_offset": [
+      0.30487220751256705,
+      0.22211359009458392
+    ],
+    "pixels_per_square": 100
+  }
+]

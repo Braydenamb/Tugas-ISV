@@ -1,0 +1,517 @@
+{
+  "profile": "baseline",
+  "versions": {
+    "opencv": "5.0.0",
+    "numpy": "2.5.4",
+    "python": "3.14.8"
+  },
+  "images_total": 29,
+  "images_used": 29,
+  "observations_used": 1418,
+  "image_size": [
+    3120,
+    4160
+  ],
+  "inner_corners": [
+    7,
+    7
+  ],
+  "square_size_mm": 44.0,
+  "K": [
+    [
+      3101.135145287646,
+      0.0,
+      1528.3632715818278
+    ],
+    [
+      0.0,
+      3104.6340948084835,
+      2161.0545853412577
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_names": [
+    "k1",
+    "k2",
+    "p1",
+    "p2",
+    "k3"
+  ],
+  "distortion": [
+    0.2920318753325932,
+    -1.800878610781898,
+    0.010743364775692873,
+    -0.006656404183934599,
+    3.054640952029248
+  ],
+  "mean_reprojection_error_px": 2.3287153244018555,
+  "rms_reprojection_error_px": 2.883255037485753,
+  "rms_recomputed_px": 2.8832552433013916,
+  "per_photo": [
+    {
+      "file": "IMG-20261026-WA0046.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.9628963470458984,
+      "rms_error_px": 2.2900242805480957,
+      "max_error_px": 5.3224101066589355
+    },
+    {
+      "file": "IMG-20261026-WA0047.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.5921285152435303,
+      "rms_error_px": 3.5271008014678955,
+      "max_error_px": 11.20032024383545
+    },
+    {
+      "file": "IMG-20261026-WA0074.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.7821156978607178,
+      "rms_error_px": 2.3299882411956787,
+      "max_error_px": 10.119492530822754
+    },
+    {
+      "file": "IMG-20261026-WA0076.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.9394617080688477,
+      "rms_error_px": 2.5803003311157227,
+      "max_error_px": 9.333191871643066
+    },
+    {
+      "file": "IMG-20261026-WA0079.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.2030580043792725,
+      "rms_error_px": 2.434018135070801,
+      "max_error_px": 4.8538641929626465
+    },
+    {
+      "file": "IMG-20261026-WA0080.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.7727131843566895,
+      "rms_error_px": 2.0705931186676025,
+      "max_error_px": 4.625744342803955
+    },
+    {
+      "file": "IMG-20261026-WA0081.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.2535769939422607,
+      "rms_error_px": 2.589677333831787,
+      "max_error_px": 7.059793472290039
+    },
+    {
+      "file": "IMG-20261026-WA0082.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.8823366165161133,
+      "rms_error_px": 3.4007890224456787,
+      "max_error_px": 10.424033164978027
+    },
+    {
+      "file": "IMG-20261026-WA0083.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.260902166366577,
+      "rms_error_px": 2.637120246887207,
+      "max_error_px": 6.068789482116699
+    },
+    {
+      "file": "IMG-20261026-WA0084.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.151196241378784,
+      "rms_error_px": 2.3836822509765625,
+      "max_error_px": 4.283290386199951
+    },
+    {
+      "file": "IMG-20261026-WA0085.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.4774327278137207,
+      "rms_error_px": 2.847440719604492,
+      "max_error_px": 9.106220245361328
+    },
+    {
+      "file": "IMG-20261026-WA0086.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.926813840866089,
+      "rms_error_px": 4.142731666564941,
+      "max_error_px": 13.329992294311523
+    },
+    {
+      "file": "IMG-20261026-WA0087.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.975465774536133,
+      "rms_error_px": 4.068878173828125,
+      "max_error_px": 13.707863807678223
+    },
+    {
+      "file": "IMG-20261026-WA0089.jpg",
+      "points_used": 48,
+      "mean_error_px": 2.5096347332000732,
+      "rms_error_px": 2.96398663520813,
+      "max_error_px": 9.495248794555664
+    },
+    {
+      "file": "IMG-20261026-WA0090.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.729287028312683,
+      "rms_error_px": 1.9681193828582764,
+      "max_error_px": 4.927857398986816
+    },
+    {
+      "file": "IMG-20261026-WA0091.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.0157642364501953,
+      "rms_error_px": 2.4586191177368164,
+      "max_error_px": 8.695626258850098
+    },
+    {
+      "file": "IMG-20261026-WA0092.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.9642690420150757,
+      "rms_error_px": 2.2494301795959473,
+      "max_error_px": 4.842014312744141
+    },
+    {
+      "file": "IMG-20261026-WA0093.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.295250654220581,
+      "rms_error_px": 2.6010990142822266,
+      "max_error_px": 7.075506210327148
+    },
+    {
+      "file": "IMG-20261026-WA0094.jpg",
+      "points_used": 48,
+      "mean_error_px": 1.8268241882324219,
+      "rms_error_px": 2.029707193374634,
+      "max_error_px": 4.401892185211182
+    },
+    {
+      "file": "IMG-20261026-WA0095.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.976107120513916,
+      "rms_error_px": 3.309204339981079,
+      "max_error_px": 6.986417293548584
+    },
+    {
+      "file": "IMG-20261026-WA0096.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.3403851985931396,
+      "rms_error_px": 3.2419943809509277,
+      "max_error_px": 9.299751281738281
+    },
+    {
+      "file": "IMG-20261026-WA0097.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.9485971927642822,
+      "rms_error_px": 2.3580923080444336,
+      "max_error_px": 7.388028621673584
+    },
+    {
+      "file": "IMG-20261026-WA0098.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.9952991008758545,
+      "rms_error_px": 3.5461997985839844,
+      "max_error_px": 9.846177101135254
+    },
+    {
+      "file": "IMG-20261026-WA0099.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.207120895385742,
+      "rms_error_px": 2.4634859561920166,
+      "max_error_px": 5.0863752365112305
+    },
+    {
+      "file": "IMG-20261026-WA0101.jpg",
+      "points_used": 48,
+      "mean_error_px": 2.0628926753997803,
+      "rms_error_px": 3.037064790725708,
+      "max_error_px": 15.770662307739258
+    },
+    {
+      "file": "IMG-20261026-WA0102.jpg",
+      "points_used": 49,
+      "mean_error_px": 3.204009771347046,
+      "rms_error_px": 3.590350389480591,
+      "max_error_px": 8.735848426818848
+    },
+    {
+      "file": "IMG-20261026-WA0103.jpg",
+      "points_used": 49,
+      "mean_error_px": 3.6061744689941406,
+      "rms_error_px": 4.034555435180664,
+      "max_error_px": 8.793289184570312
+    },
+    {
+      "file": "IMG-20261026-WA0104.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.849338173866272,
+      "rms_error_px": 2.1857070922851562,
+      "max_error_px": 6.0039753913879395
+    },
+    {
+      "file": "IMG-20261026-WA0105.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.8097171783447266,
+      "rms_error_px": 2.196025848388672,
+      "max_error_px": 6.160053253173828
+    }
+  ],
+  "excluded_points": [
+    {
+      "file": "IMG-20261026-WA0089.jpg",
+      "index": 48,
+      "row": 7,
+      "col": 7,
+      "reason": "Pantulan kuat menutupi batas warna; penanda tertarik pada tekstur kayu dan posisi sudut tidak dapat ditetapkan dengan yakin."
+    },
+    {
+      "file": "IMG-20261026-WA0094.jpg",
+      "index": 37,
+      "row": 6,
+      "col": 3,
+      "reason": "Pantulan dan tekstur mengaburkan pertemuan empat kotak; lokalisasi sudut tidak dapat dipastikan dari gambar."
+    },
+    {
+      "file": "IMG-20261026-WA0101.jpg",
+      "index": 45,
+      "row": 7,
+      "col": 4,
+      "reason": "Penanda jatuh pada tekstur/pantulan di sisi celah papan; persilangan tunggal empat kotak tidak dapat ditetapkan dengan yakin dari gambar."
+    }
+  ],
+  "inputs": [
+    {
+      "file": "IMG-20261026-WA0046.jpg",
+      "sha256": "32196bdfed5f588b4a97a9c2c8d01c08c63e28e68df9eb40ecf04d379f5f02b9",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0047.jpg",
+      "sha256": "7b10aedac56ba2c41f95c1cf60579b375d384004dcf9b431832476f539c22319",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0074.jpg",
+      "sha256": "d2ce0f9068eeec1ba836da9a88d674414849079daaccf8f4cb779baf48c2574a",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0076.jpg",
+      "sha256": "1c9aa5539c10db501ea192b9a40c89de4c6dc42aa32e13e12fb35cd78ea70d7a",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0079.jpg",
+      "sha256": "25b49eb66f0ae6fdb337efd1a87a0c59007d96d9a4e78c5935e4937458673147",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0080.jpg",
+      "sha256": "f4365dbb971646ccc75929c30af30506be6d103ec0b8591ca793160c763d1d4a",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0081.jpg",
+      "sha256": "392ba06f1bfd53d1d2c97b80b59879c3b6d0b5d43e9b08ca012dbfde3bf3def2",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0082.jpg",
+      "sha256": "6b7e016480571ddbcdc80c2818526b2e74560e25cff35cafa8d2afa9f1563473",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0083.jpg",
+      "sha256": "f6853829d7c80cd97813887470f737150bf7b1a0f697cc999377c8a5f25ee664",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0084.jpg",
+      "sha256": "1faed97bcb15ec7fe1481323c0174450c4cbbcef65bcdb209a9792b157b425a7",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0085.jpg",
+      "sha256": "78cc05030bd5b5cd0a198eef943545739c588fb2504dd06eee96aa6e0aec23f5",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0086.jpg",
+      "sha256": "786e58209815ce6300964e6f7ddc576f88823d3ef03c5a0c037cb3f490695c54",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0087.jpg",
+      "sha256": "0e2ee07d08db64ce4ca3477b7a4012e1047f029716210c414ecbe19dbfb14469",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0089.jpg",
+      "sha256": "7c9470929a2b437d91d0d5c54ed56cfb4818c1db70f18bd809b57d02384f13ab",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 48
+    },
+    {
+      "file": "IMG-20261026-WA0090.jpg",
+      "sha256": "7f3b102291a8449cb386a36df7398756b7cdf19b2f975191bbb6092a683d6e04",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0091.jpg",
+      "sha256": "abe31749716d742ba69a39ea1f61e28aeab699ce07080d1154349b3bd69b735b",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0092.jpg",
+      "sha256": "02a215e1af21190283e8f6aef7b50e60bbe7e4026c18ab5744e56dad2a77966e",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0093.jpg",
+      "sha256": "11fd1bcec9a5c702375e6392954862b6fdc15791e2cf7f257a0c6cac37ec1964",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0094.jpg",
+      "sha256": "19b816996c53dd0f493cfbaa0b79b0044a5b4a82088c20b4047cc3cc0e091cbc",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 48
+    },
+    {
+      "file": "IMG-20261026-WA0095.jpg",
+      "sha256": "967665ee9ce5b862a09ca8d4db57eadc58aee05f45fdd43ca028bafdf90f501e",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0096.jpg",
+      "sha256": "c60ca0269f429e36d392a5df4473697c0ee8b1568f7de2ba2fa14274690bee90",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0097.jpg",
+      "sha256": "05a4a6a871a5930df92dfc3bebc943f87ad11fd48ebea9bcc05d502ab4460abd",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0098.jpg",
+      "sha256": "493b176aa5348ed1d9f2e622e85baadd7d406b8c8506019f8bf1815a9943b286",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0099.jpg",
+      "sha256": "f2d7d63905e2b418eb16e0b4c845ea721e3b3f1d5958a8cf9be3f8b212c0f1db",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0101.jpg",
+      "sha256": "8447871c0364f8eb7385f238fe2a2c791047e156a899f7064e1237f49f5db287",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 48
+    },
+    {
+      "file": "IMG-20261026-WA0102.jpg",
+      "sha256": "de5b782c8dd431c2205001117af970019cbe235ab0cfde931e6aa26068027d29",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0103.jpg",
+      "sha256": "e4fa1b9e37aaa604d8e23e8726109e2f59a229e7f1d9223ab0509249b7729525",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0104.jpg",
+      "sha256": "4ad1553b3a5d9ec9a2c01ba83d6801fc3a5126a114177546b665567f44cd569a",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    },
+    {
+      "file": "IMG-20261026-WA0105.jpg",
+      "sha256": "b3aeed4c898dbde5a0e6a11e36ac6bd15378825e9bd1a729bacbe418ca18bdf4",
+      "status": "used",
+      "reason": "",
+      "seed_source": "verified_image_hash_and_saved_initialization",
+      "points_used": 49
+    }
+  ],
+  "method_note": "Planar calibration following lecture; additional image-based corner measurement. No observations rejected using calibration residuals. Homography initializes search windows only. Final points use original image pixel coordinates."
+}

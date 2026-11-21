@@ -1,0 +1,11 @@
+{
+  "inner_corners": [7, 7],
+  "square_size_mm": 44.0,
+  "minimum_photos": 12,
+  "photos": "data/photos",
+  "initial_corners": "data/initial_corners.npz",
+  "dataset_manifest": "data/dataset_manifest.json",
+  "excluded_points": "config/excluded_points.json",
+  "preprocessing": "baseline",
+  "threads": 4
+}

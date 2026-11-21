@@ -1,0 +1,159 @@
+{
+  "results": [
+    {
+      "detector": "local_corner",
+      "model": "single_plane",
+      "photos": 29,
+      "pose_count": 29,
+      "training_points": 1216,
+      "training_mean_px": 2.0947896973934563,
+      "training_rms_px": 2.44913231334033,
+      "validation_points": 579,
+      "validation_mean_px": 2.1351345111720508,
+      "validation_rms_px": 2.5194392271250488,
+      "K": [
+        [
+          3106.707974347931,
+          0.0,
+          1530.78848052649
+        ],
+        [
+          0.0,
+          3110.2312296083887,
+          2157.8993272057837
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.29660122349911483,
+        -1.8452817828121304,
+        0.010026116363896935,
+        -0.006575575455131106,
+        3.219011071498025
+      ]
+    },
+    {
+      "detector": "local_corner",
+      "model": "two_panels",
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.9023771751350356,
+      "training_rms_px": 1.2762213116158283,
+      "validation_points": 579,
+      "validation_mean_px": 0.9679594157466308,
+      "validation_rms_px": 1.4317445228544639,
+      "K": [
+        [
+          3122.602224611823,
+          0.0,
+          1595.090069203752
+        ],
+        [
+          0.0,
+          3117.5251638952263,
+          2119.388063339501
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.31768626409869827,
+        -2.00834493338335,
+        0.006343017462416618,
+        0.0015005677888991474,
+        3.7409674512908304
+      ]
+    },
+    {
+      "detector": "checker_correlation",
+      "model": "single_plane",
+      "photos": 29,
+      "pose_count": 29,
+      "training_points": 1216,
+      "training_mean_px": 2.0237075759382845,
+      "training_rms_px": 2.3380667455007416,
+      "validation_points": 579,
+      "validation_mean_px": 2.011754387696893,
+      "validation_rms_px": 2.338840817085416,
+      "K": [
+        [
+          3108.1456108812654,
+          0.0,
+          1528.110782846419
+        ],
+        [
+          0.0,
+          3110.3354740722184,
+          2157.4001886505953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.2956154229785104,
+        -1.8197059265103368,
+        0.010170067162899128,
+        -0.006975350049171265,
+        3.1076279329190095
+      ]
+    },
+    {
+      "detector": "checker_correlation",
+      "model": "two_panels",
+      "photos": 29,
+      "pose_count": 58,
+      "training_points": 1216,
+      "training_mean_px": 0.7802217861753888,
+      "training_rms_px": 1.048189032863142,
+      "validation_points": 579,
+      "validation_mean_px": 0.7881349266662756,
+      "validation_rms_px": 1.0560516275866465,
+      "K": [
+        [
+          3129.790786947994,
+          0.0,
+          1596.6814009519098
+        ],
+        [
+          0.0,
+          3123.742064468533,
+          2114.0554130588484
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "distortion": [
+        0.31439064522948923,
+        -1.9654007782668146,
+        0.005992026098027109,
+        0.0013864960150806796,
+        3.581650288948679
+      ]
+    }
+  ],
+  "same_validation_observations": true,
+  "folds": 5,
+  "observations_used": 1216,
+  "validation_observations": 579,
+  "versions": {
+    "opencv": "5.0.0",
+    "numpy": "2.5.4",
+    "python": "3.14.8"
+  },
+  "square_size_mm": 44.0,
+  "note": "All photos retained. Center seam excluded uniformly by physical geometry, not residuals. All variants use the same nonseam point identities. Two-panel model adds six pose parameters per photo. Cross-validation is internal and is not independent metrology validation."
+}

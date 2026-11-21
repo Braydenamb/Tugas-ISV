@@ -1,0 +1,280 @@
+{
+  "opencv": "5.0.0",
+  "images_total": 29,
+  "images_used": 29,
+  "observations_used": 1418,
+  "excluded_points": [
+    {
+      "file": "IMG-20261026-WA0101.jpg",
+      "index": 45,
+      "row": 7,
+      "col": 4,
+      "reason": "Penanda jatuh pada tekstur/pantulan di sisi celah papan; persilangan tunggal empat kotak tidak dapat ditetapkan dengan yakin dari gambar."
+    },
+    {
+      "file": "IMG-20261026-WA0089.jpg",
+      "index": 48,
+      "row": 7,
+      "col": 7,
+      "reason": "Pantulan kuat menutupi batas warna; penanda tertarik pada tekstur kayu dan posisi sudut tidak dapat ditetapkan dengan yakin."
+    },
+    {
+      "file": "IMG-20261026-WA0094.jpg",
+      "index": 37,
+      "row": 6,
+      "col": 3,
+      "reason": "Pantulan dan tekstur mengaburkan pertemuan empat kotak; lokalisasi sudut tidak dapat dipastikan dari gambar."
+    }
+  ],
+  "image_size": [
+    3120,
+    4160
+  ],
+  "inner_corners": [
+    7,
+    7
+  ],
+  "square_size": 44.0,
+  "square_size_unit": "mm",
+  "method": "Planar camera calibration following lecture pp. 45-52 and 57-60; audited local corner detection as an additional preprocessing step",
+  "translation_unit": "mm",
+  "K": [
+    [
+      3101.135144532408,
+      0.0,
+      1528.3632712620924
+    ],
+    [
+      0.0,
+      3104.634094212878,
+      2161.0545868067484
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_names": [
+    "k1",
+    "k2",
+    "p1",
+    "p2",
+    "k3"
+  ],
+  "distortion": [
+    0.2920318748862804,
+    -1.8008786102713727,
+    0.010743364850724142,
+    -0.006656404238648389,
+    3.0546409649170765
+  ],
+  "mean_reprojection_error_px": 2.3287153244018555,
+  "rms_reprojection_error_px": 2.8832550374857524,
+  "rms_recomputed_px": 2.8832552433013916,
+  "per_image": [
+    {
+      "file": "IMG-20261026-WA0046.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.9628963470458984,
+      "rms_error_px": 2.2900242805480957,
+      "max_error_px": 5.3224101066589355
+    },
+    {
+      "file": "IMG-20261026-WA0047.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.5921285152435303,
+      "rms_error_px": 3.5271008014678955,
+      "max_error_px": 11.20032024383545
+    },
+    {
+      "file": "IMG-20261026-WA0079.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.2030580043792725,
+      "rms_error_px": 2.434018135070801,
+      "max_error_px": 4.8538641929626465
+    },
+    {
+      "file": "IMG-20261026-WA0080.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.7727131843566895,
+      "rms_error_px": 2.0705931186676025,
+      "max_error_px": 4.625744342803955
+    },
+    {
+      "file": "IMG-20261026-WA0081.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.2535769939422607,
+      "rms_error_px": 2.589677333831787,
+      "max_error_px": 7.059793472290039
+    },
+    {
+      "file": "IMG-20261026-WA0082.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.8823366165161133,
+      "rms_error_px": 3.4007890224456787,
+      "max_error_px": 10.424033164978027
+    },
+    {
+      "file": "IMG-20261026-WA0083.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.260902166366577,
+      "rms_error_px": 2.637120246887207,
+      "max_error_px": 6.068789482116699
+    },
+    {
+      "file": "IMG-20261026-WA0084.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.151196241378784,
+      "rms_error_px": 2.3836822509765625,
+      "max_error_px": 4.283290386199951
+    },
+    {
+      "file": "IMG-20261026-WA0085.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.4774327278137207,
+      "rms_error_px": 2.847440719604492,
+      "max_error_px": 9.106220245361328
+    },
+    {
+      "file": "IMG-20261026-WA0087.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.975465774536133,
+      "rms_error_px": 4.068878173828125,
+      "max_error_px": 13.707863807678223
+    },
+    {
+      "file": "IMG-20261026-WA0089.jpg",
+      "points_used": 48,
+      "mean_error_px": 2.5096347332000732,
+      "rms_error_px": 2.96398663520813,
+      "max_error_px": 9.495248794555664
+    },
+    {
+      "file": "IMG-20261026-WA0094.jpg",
+      "points_used": 48,
+      "mean_error_px": 1.8268241882324219,
+      "rms_error_px": 2.029707193374634,
+      "max_error_px": 4.401892185211182
+    },
+    {
+      "file": "IMG-20261026-WA0096.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.3403851985931396,
+      "rms_error_px": 3.2419943809509277,
+      "max_error_px": 9.299751281738281
+    },
+    {
+      "file": "IMG-20261026-WA0098.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.9952991008758545,
+      "rms_error_px": 3.5461997985839844,
+      "max_error_px": 9.846177101135254
+    },
+    {
+      "file": "IMG-20261026-WA0101.jpg",
+      "points_used": 48,
+      "mean_error_px": 2.0628926753997803,
+      "rms_error_px": 3.037064790725708,
+      "max_error_px": 15.770662307739258
+    },
+    {
+      "file": "IMG-20261026-WA0074.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.7821156978607178,
+      "rms_error_px": 2.3299882411956787,
+      "max_error_px": 10.119492530822754
+    },
+    {
+      "file": "IMG-20261026-WA0076.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.9394617080688477,
+      "rms_error_px": 2.5803003311157227,
+      "max_error_px": 9.333191871643066
+    },
+    {
+      "file": "IMG-20261026-WA0086.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.926813840866089,
+      "rms_error_px": 4.142731666564941,
+      "max_error_px": 13.329992294311523
+    },
+    {
+      "file": "IMG-20261026-WA0090.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.729287028312683,
+      "rms_error_px": 1.9681193828582764,
+      "max_error_px": 4.927857398986816
+    },
+    {
+      "file": "IMG-20261026-WA0091.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.0157642364501953,
+      "rms_error_px": 2.4586191177368164,
+      "max_error_px": 8.695626258850098
+    },
+    {
+      "file": "IMG-20261026-WA0092.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.9642690420150757,
+      "rms_error_px": 2.2494301795959473,
+      "max_error_px": 4.842014312744141
+    },
+    {
+      "file": "IMG-20261026-WA0093.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.295250654220581,
+      "rms_error_px": 2.6010990142822266,
+      "max_error_px": 7.075506210327148
+    },
+    {
+      "file": "IMG-20261026-WA0095.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.976107120513916,
+      "rms_error_px": 3.309204339981079,
+      "max_error_px": 6.986417293548584
+    },
+    {
+      "file": "IMG-20261026-WA0097.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.9485971927642822,
+      "rms_error_px": 2.3580923080444336,
+      "max_error_px": 7.388028621673584
+    },
+    {
+      "file": "IMG-20261026-WA0099.jpg",
+      "points_used": 49,
+      "mean_error_px": 2.207120895385742,
+      "rms_error_px": 2.4634859561920166,
+      "max_error_px": 5.0863752365112305
+    },
+    {
+      "file": "IMG-20261026-WA0102.jpg",
+      "points_used": 49,
+      "mean_error_px": 3.204009771347046,
+      "rms_error_px": 3.590350389480591,
+      "max_error_px": 8.735848426818848
+    },
+    {
+      "file": "IMG-20261026-WA0103.jpg",
+      "points_used": 49,
+      "mean_error_px": 3.6061744689941406,
+      "rms_error_px": 4.034555435180664,
+      "max_error_px": 8.793289184570312
+    },
+    {
+      "file": "IMG-20261026-WA0104.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.849338173866272,
+      "rms_error_px": 2.1857070922851562,
+      "max_error_px": 6.0039753913879395
+    },
+    {
+      "file": "IMG-20261026-WA0105.jpg",
+      "points_used": 49,
+      "mean_error_px": 1.8097171783447266,
+      "rms_error_px": 2.196025848388672,
+      "max_error_px": 6.160053253173828
+    }
+  ]
+}

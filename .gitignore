@@ -1,10 +1,9 @@
-# Hanya lingkungan lokal, cache, dan cadangan teknis yang tidak dibagikan
+# Hanya lingkungan lokal dan cache yang tidak dibagikan
 .venv/
 venv/
 __pycache__/
 *.py[cod]
 .cache/
-.cadangan_teknis/
 
 # Berkas lokal editor dan kredensial
 .idea/
@@ -19,4 +18,4 @@ Thumbs.db
 .agents/
 .codex/
 
-# Foto, data, audit, dan laporan sengaja TIDAK di-ignore.
+# Foto, data, audit, laporan, dan cadangan teknis sengaja TIDAK di-ignore.

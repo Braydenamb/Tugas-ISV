@@ -1,0 +1,53 @@
+{
+  "detector": "global200",
+  "model": "two_panels",
+  "lens_model": "polynomial5_plus_prism4",
+  "calibration_flags": 32768,
+  "photos": 29,
+  "pose_count": 58,
+  "training_points": 1216,
+  "training_mean_px": 0.7391307706221644,
+  "training_rms_px": 0.9961465719899085,
+  "validation_points": 579,
+  "validation_mean_px": 0.7364117971803215,
+  "validation_rms_px": 0.9962473684102373,
+  "K": [
+    [
+      3073.679785422266,
+      0.0,
+      1603.3109066556574
+    ],
+    [
+      0.0,
+      3080.657343443941,
+      2104.6398124560255
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion": [
+    0.2897876969207609,
+    -1.7549772511871733,
+    -0.009929134839666598,
+    0.0022584818594971368,
+    3.0484023510758202,
+    0.0,
+    0.0,
+    0.0,
+    0.0038100302921051953,
+    -0.02784597091702349,
+    0.023364771599961576,
+    -0.029268823388334874
+  ],
+  "distortion_health": {
+    "positive_radial_denominator_poles": [],
+    "approximate_sensor_corner_radius": 0.8595503691944698,
+    "pole_within_approximate_sensor_extent": false,
+    "minimum_sampled_jacobian_determinant": 0.9785337893132673,
+    "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+    "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+  }
+}

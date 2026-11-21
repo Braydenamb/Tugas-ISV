@@ -35,14 +35,15 @@ pola -> resolusi lebih tinggi -> hasil akhir dan laporan.
 - `audit/`: bukti dan angka setiap tahap, termasuk riwayat audit lama dalam ZIP.
 - `laporan/`: laporan PDF dan ringkasan yang mudah dibaca.
 - `materi/`: PDF kuliah sebagai acuan.
+- `.cadangan_teknis/`: struktur proyek sebelumnya, kode, konfigurasi, dan hasil eksperimen.
 
 Foto diberi nomor menurut urutan nama asli, bukan kualitas foto.
 Tabel `data/Identitas_Foto.csv` memasangkan nama baru, nama asli, dan hash foto.
 Isi gambar tidak diubah. Nama dalam arsip audit lama dipertahankan sebagai riwayat;
 seluruh rujukan pada data dan audit aktif sudah memakai nama baru.
 
-Semua foto, hasil audit, dan laporan **ikut Git**. Hanya lingkungan Python,
-cache, cadangan teknis dan berkas lokal yang diabaikan. Audit lama tidak dihapus:
+Semua foto, hasil audit, laporan, dan cadangan teknis **ikut Git**. Hanya lingkungan Python,
+cache dan berkas lokal yang diabaikan, termasuk yang ada di dalam cadangan teknis. Audit lama tidak dihapus:
 ada di `audit/Riwayat_Audit.zip`; arsip itu tidak perlu diekstrak untuk menjalankan tugas.
 
 Menjalankan ulang memperbarui enam tahap audit dan laporan PDF dengan alur yang sama.

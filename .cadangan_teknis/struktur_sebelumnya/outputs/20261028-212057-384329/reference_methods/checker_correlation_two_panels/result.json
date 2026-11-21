@@ -1,0 +1,46 @@
+{
+  "detector": "checker_correlation",
+  "model": "two_panels",
+  "lens_model": "standard5",
+  "calibration_flags": 0,
+  "photos": 29,
+  "pose_count": 58,
+  "training_points": 1216,
+  "training_mean_px": 0.7803402313178307,
+  "training_rms_px": 1.0483092709065887,
+  "validation_points": 579,
+  "validation_mean_px": 0.7882748514265852,
+  "validation_rms_px": 1.0561282840831152,
+  "K": [
+    [
+      3129.7852217722157,
+      0.0,
+      1596.682990302711
+    ],
+    [
+      0.0,
+      3123.734250247661,
+      2114.0545458788843
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion": [
+    0.31440117254367483,
+    -1.9654536704420853,
+    0.005992665576247838,
+    0.0013870390056483402,
+    3.581689591025269
+  ],
+  "distortion_health": {
+    "positive_radial_denominator_poles": [],
+    "approximate_sensor_corner_radius": 0.8475141907227544,
+    "pole_within_approximate_sensor_extent": false,
+    "minimum_sampled_jacobian_determinant": 0.9868563882650103,
+    "nonpositive_or_nonfinite_jacobian_fraction": 0.0,
+    "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+  }
+}

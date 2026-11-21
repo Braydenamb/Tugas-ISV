@@ -1,0 +1,55 @@
+{
+  "detector": "global100",
+  "model": "two_panels",
+  "lens_model": "rational8_plus_prism4",
+  "calibration_flags": 49152,
+  "photos": 29,
+  "pose_count": 58,
+  "training_points": 1216,
+  "training_mean_px": 0.7440287309398531,
+  "training_rms_px": 0.992909721826863,
+  "validation_points": 579,
+  "validation_mean_px": 0.7493712949648577,
+  "validation_rms_px": 1.0126714079619523,
+  "K": [
+    [
+      3079.007310780984,
+      0.0,
+      1601.1548433603687
+    ],
+    [
+      0.0,
+      3085.317498226963,
+      2103.804550515901
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion": [
+    -5.482924083739642,
+    51.994148382028236,
+    -0.009520124489131178,
+    0.0016586353659799324,
+    -221.98711431827266,
+    -5.705296304607079,
+    53.34670272282632,
+    -223.47961270883022,
+    0.00473523797202515,
+    -0.028295565243366662,
+    0.02328283493972494,
+    -0.031702407490473795
+  ],
+  "distortion_health": {
+    "positive_radial_denominator_poles": [
+      0.4650998463032008
+    ],
+    "approximate_sensor_corner_radius": 0.8575424999666841,
+    "pole_within_approximate_sensor_extent": true,
+    "minimum_sampled_jacobian_determinant": -149.0681616015754,
+    "nonpositive_or_nonfinite_jacobian_fraction": 0.009365244536940686,
+    "note": "Pole roots are exact. Radius/Jacobian use an approximate normalized sensor domain and a 31x31 sample grid; no poles or sampled folds does not prove invertibility or accuracy outside the observed target."
+  }
+}

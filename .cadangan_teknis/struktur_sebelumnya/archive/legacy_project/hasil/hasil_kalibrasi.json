@@ -1,0 +1,137 @@
+{
+  "opencv": "4.11.0",
+  "images_total": 29,
+  "images_used": 14,
+  "image_size": [
+    3120,
+    4160
+  ],
+  "inner_corners": [
+    7,
+    7
+  ],
+  "square_size": 42.0,
+  "translation_unit": "mm",
+  "K": [
+    [
+      3094.057716794903,
+      0.0,
+      1513.9551586753853
+    ],
+    [
+      0.0,
+      3102.5731830414134,
+      2169.2409741063525
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "distortion_names": [
+    "k1",
+    "k2",
+    "p1",
+    "p2",
+    "k3"
+  ],
+  "distortion": [
+    0.3504479574557886,
+    -2.783603059267939,
+    0.0088787340821683,
+    -0.008804861428673242,
+    6.53271152096454
+  ],
+  "mean_reprojection_error_px": 3.779167413711548,
+  "rms_reprojection_error_px": 6.354951952276291,
+  "rms_recomputed_px": 6.354954242706299,
+  "per_image": [
+    {
+      "file": "IMG-20261026-WA0074.jpg",
+      "mean_error_px": 2.552955150604248,
+      "rms_error_px": 3.558201551437378,
+      "max_error_px": 15.753896713256836
+    },
+    {
+      "file": "IMG-20261026-WA0076.jpg",
+      "mean_error_px": 3.701734781265259,
+      "rms_error_px": 4.942266941070557,
+      "max_error_px": 16.185855865478516
+    },
+    {
+      "file": "IMG-20261026-WA0086.jpg",
+      "mean_error_px": 5.188132286071777,
+      "rms_error_px": 8.056960105895996,
+      "max_error_px": 25.578245162963867
+    },
+    {
+      "file": "IMG-20261026-WA0090.jpg",
+      "mean_error_px": 1.9425084590911865,
+      "rms_error_px": 2.411510705947876,
+      "max_error_px": 9.484350204467773
+    },
+    {
+      "file": "IMG-20261026-WA0091.jpg",
+      "mean_error_px": 1.9223322868347168,
+      "rms_error_px": 2.1730875968933105,
+      "max_error_px": 4.263862133026123
+    },
+    {
+      "file": "IMG-20261026-WA0092.jpg",
+      "mean_error_px": 3.2909929752349854,
+      "rms_error_px": 4.102250576019287,
+      "max_error_px": 10.370941162109375
+    },
+    {
+      "file": "IMG-20261026-WA0093.jpg",
+      "mean_error_px": 6.747116565704346,
+      "rms_error_px": 12.427042007446289,
+      "max_error_px": 44.9628791809082
+    },
+    {
+      "file": "IMG-20261026-WA0095.jpg",
+      "mean_error_px": 5.7914605140686035,
+      "rms_error_px": 8.337014198303223,
+      "max_error_px": 32.82583236694336
+    },
+    {
+      "file": "IMG-20261026-WA0097.jpg",
+      "mean_error_px": 3.1699602603912354,
+      "rms_error_px": 4.780625820159912,
+      "max_error_px": 17.027069091796875
+    },
+    {
+      "file": "IMG-20261026-WA0099.jpg",
+      "mean_error_px": 2.4138410091400146,
+      "rms_error_px": 2.7496495246887207,
+      "max_error_px": 6.355108737945557
+    },
+    {
+      "file": "IMG-20261026-WA0102.jpg",
+      "mean_error_px": 7.882316589355469,
+      "rms_error_px": 11.427335739135742,
+      "max_error_px": 44.27177047729492
+    },
+    {
+      "file": "IMG-20261026-WA0103.jpg",
+      "mean_error_px": 3.409442901611328,
+      "rms_error_px": 3.9551870822906494,
+      "max_error_px": 9.38663387298584
+    },
+    {
+      "file": "IMG-20261026-WA0104.jpg",
+      "mean_error_px": 1.4403074979782104,
+      "rms_error_px": 1.7002426385879517,
+      "max_error_px": 3.7108638286590576
+    },
+    {
+      "file": "IMG-20261026-WA0105.jpg",
+      "mean_error_px": 3.4552412033081055,
+      "rms_error_px": 5.705977916717529,
+      "max_error_px": 29.362688064575195
+    }
+  ],
+  "square_size_unit": "mm",
+  "square_size_note": "User provided 4.2 x 4.2; cm assumed. Object points and translations rescaled from prior solution; K, D and reprojections unchanged."
+}
